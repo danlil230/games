@@ -1,0 +1,387 @@
+!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Игровая Империя Дани</title>
+    <style>
+        body {
+            background-color: #0b132b;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(28, 37, 65, 0.8) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(58, 80, 107, 0.6) 0%, transparent 45%);
+            color: #ffffff;
+            text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 40px;
+            margin: 0;
+            overflow: hidden;
+            height: 100vh;
+            user-select: none;
+        }
+        h1 {
+            font-size: 32px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px #00b4d8;
+            margin-bottom: 5px;
+        }
+        p { color: #6fffe9; font-size: 16px; }
+        .btn-game {
+            display: block;
+            width: 280px;
+            margin: 12px auto;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            background: linear-gradient(135deg, #00b4d8 0%, #5e60ce 100%);
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0, 180, 216, 0.4);
+            cursor: pointer;
+            transition: all 0.2s ease; 
+        }
+        .btn-game:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 10px 25px #6fffe9, 0 0 15px #00b4d8;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            width: 320px;
+            margin: 20px auto;
+        }        .btn-variant {
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            background: #1c2541;
+            border: 2px solid #3a506b;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-variant:hover {
+            background: #3a506b;
+            border-color: #6fffe9;
+            box-shadow: 0 0 10px #6fffe9;
+        }
+        .input-number {
+            font-size: 24px;
+            padding: 10px;
+            width: 120px;
+            text-align: center;
+            border: 2px solid #00b4d8;
+            border-radius: 15px;
+            background-color: #1c2541;
+            color: #6fffe9;
+            box-shadow: 0 0 10px rgba(0, 180, 216, 0.5);
+            outline: none;
+            margin: 15px auto;
+            display: block;
+        }
+        .game-screen { display: none; margin-top: 20px; padding: 20px; }
+        .timer-container {
+            width: 300px;
+            height: 20px;
+            background: #1c2541;
+            border: 2px solid #00b4d8;
+            border-radius: 10px;
+            margin: 15px auto;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 180, 216, 0.3);
+        }
+        .timer-bar {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #6fffe9, #00b4d8);
+            transition: width 0.1s linear;
+        }
+        .star {
+            position: absolute;
+            pointer-events: none;
+            font-size: 24px;
+            animation: fly 0.6s ease-out forwards;
+        }
+        @keyframes fly {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--mx), var(--my)) scale(0.2); opacity: 0; }
+        }
+    </style>
+</head>
+<body onclick="spawnStars(event)">
+
+    <div id="main-menu">
+        <h1>🎉 ИГРОВАЯ ИМПЕРИЯ ДАНИ 🎉</h1>
+        <p>🎮 Добро пожаловать в праздничный Mini App! 🎮</p>
+        <div style="margin-top: 30px;">
+            <button class="btn-game" onclick="startGuessGame()">🎲 Угадай число</button>
+            <button class="btn-game" onclick="startQuizGame()">💡 Викторина-Квиз</button>
+            <button class="btn-game" onclick="startCasesGame()">📝 Охота за падежами</button>
+            <button class="btn-game" style="background: linear-gradient(135deg, #ff0055 0%, #ffaa00 100%);" onclick="startTimeGame()">⚡ Спидран: На время!</button>
+        </div>
+    </div>    <div id="guess-game-screen" class="game-screen">
+        <h2>🎲 Игра: Угадай Число</h2>
+        <p style="font-size: 18px;">Я загадал число от 1 до 100. У тебя 7 попыток!</p>
+        <p style="font-size: 20px; font-weight: bold; color: #ffea00;" id="attempts-text">Осталось попыток: 7/7</p>
+        <input type="number" id="user-guess-input" class="input-number" min="1" max="100" placeholder="0">
+        <p id="guess-feedback" style="font-size: 22px; font-weight: bold; color: #6fffe9; min-height: 30px;"></p>
+        <button class="btn-game" onclick="checkUserGuess(event)">🔥 Проверить!</button>
+        <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
+    </div>
+
+    <div id="quiz-game-screen" class="game-screen">
+        <h2>💡 Викторина-Квиз</h2>
+        <p style="font-size: 22px; font-weight: bold; color: #6fffe9; margin-bottom: 20px;" id="quiz-question-text">Вопрос</p>
+        <div class="grid-container">
+            <button class="btn-variant" onclick="checkQuizAnswer('А', event)" id="quiz-btn-A">А</button>
+            <button class="btn-variant" onclick="checkQuizAnswer('Б', event)" id="quiz-btn-Б">Б</button>
+            <button class="btn-variant" onclick="checkQuizAnswer('В', event)" id="quiz-btn-В">В</button>
+            <button class="btn-variant" onclick="checkQuizAnswer('Г', event)" id="quiz-btn-Г">Г</button>
+        </div>
+        <p id="quiz-feedback" style="font-size: 20px; font-weight: bold; min-height: 30px;"></p>
+        <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
+    </div>
+
+    <div id="cases-game-screen" class="game-screen">
+        <h2>📝 Охота за падежами</h2>
+        <p style="font-size: 18px;">Определи падеж весёлой фразы:</p>
+        <p style="font-size: 24px; font-weight: bold; color: #ffea00; margin-bottom: 25px;" id="case-phrase-text">Фраза</p>
+        <div class="grid-container" style="grid-template-columns: 1fr 1fr 1fr; width: 360px;">
+            <button class="btn-variant" onclick="checkCaseAnswer('И.п.', event)">И.п.</button>
+            <button class="btn-variant" onclick="checkCaseAnswer('Р.п.', event)">Р.п.</button>
+            <button class="btn-variant" onclick="checkCaseAnswer('Д.п.', event)">Д.п.</button>
+            <button class="btn-variant" onclick="checkCaseAnswer('В.п.', event)">В.п.</button>
+            <button class="btn-variant" onclick="checkCaseAnswer('Т.п.', event)">Т.п.</button>
+            <button class="btn-variant" onclick="checkCaseAnswer('П.п.', event)">П.п.</button>
+        </div>
+        <p id="cases-feedback" style="font-size: 20px; font-weight: bold; min-height: 30px;"></p>
+        <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
+    </div>
+
+    <div id="time-game-screen" class="game-screen">
+        <h2>⚡ Математика на время!</h2>
+        <p style="font-size: 18px;">Реши 10 примеров подряд, пока тикает таймер!</p>
+        <p style="font-size: 22px; font-weight: bold; color: #ffea00;" id="time-score-text">Решено примеров: 0/10</p>
+        <div class="timer-container"><div id="time-bar-element" class="timer-bar"></div></div>
+        <p style="font-size: 26px; font-weight: bold; color: #ffffff; margin: 15px;" id="time-example-text">Пример</p>
+        <input type="number" id="user-time-input" class="input-number" placeholder="?">
+        <p id="time-feedback" style="font-size: 20px; font-weight: bold; min-height: 30px;"></p>
+        <button class="btn-game" onclick="checkTimeAnswer(event)">🔥 Проверить!</button>
+        <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
+    </div>    
+<script>
+        const QUIZ_DATA = [
+            {"q": "Какой язык программирования назван в честь змеи? 🐍", "a": "А) JavaScript", "b": "Б) Python", "c": "В) С++", "d": "Г) Скретч", "ok": "Б"},
+            {"q": "Что программисты называют 'деплоем'? ☁️", "a": "А) Перенос на сервер", "b": "Б) Поход за чипсами", "c": "В) Ошибку в коде", "d": "Г) Сон", "ok": "А"},
+            {"q": "Лимит знаков в одном сообщении Telegram? 📜", "a": "А) 100", "b": "Б) 1000", "c": "В) 4096", "d": "Г) Нет лимита", "ok": "В"}
+        ];
+
+        const CASE_DATA = [
+            {"p": "Горжусь (кем? чем?) любимым роботом 🤖", "ok": "Т.п.", "h": "Творительный (кем? чем?)"},
+            {"p": "Радуюсь (кому? чему?) отмене внеурочки! 🎉", "ok": "Д.п.", "h": "Дательный (кому? чему?)"},
+            {"p": "Вижу (кого? что?) вечный сервер ☁️", "ok": "В.п.", "h": "Винительный (кого? что?)"},
+            {"p": "Думаю о (ком? чём?) крутом Mini App 🚀", "ok": "П.п.", "h": "Предложный (о ком? о чём?)"}
+        ];
+
+        let secretNum, lives, isGameOver = false;
+        let currentQuizIndex = 0;
+        let currentCaseIndex = 0;
+
+        let timeScore = 0;
+        let timeCorrectAnswer = 0;
+        let timeLeft = 100;
+        let timeInterval = null;
+        let isTimeGameOver = false;
+
+        function spawnStars(e) {
+            for (let i = 0; i < 10; i++) {
+                const star = document.createElement('div');
+                star.className = 'star'; star.innerText = '⭐';
+                star.style.left = (e.clientX - 12) + 'px'; star.style.top = (e.clientY - 12) + 'px';
+                const angle = Math.random() * Math.PI * 2; const dist = 30 + Math.random() * 70;
+                star.style.setProperty('--mx', Math.cos(angle) * dist + 'px');
+                star.style.setProperty('--my', Math.sin(angle) * dist + 'px');
+                document.body.appendChild(star);
+                setTimeout(() => star.remove(), 600);
+            }
+        }
+
+        function bigCelebration() {
+            for(let i=0; i<40; i++) { 
+                setTimeout(() => {
+                    spawnStars({clientX: Math.random() * window.innerWidth, clientY: Math.random() * window.innerHeight});
+                }, i * 50);
+            }
+        }
+
+        function startGuessGame() {
+            hideAllScreens(); document.getElementById('guess-game-screen').style.display = 'block';
+            secretNum = Math.floor(Math.random() * 100) + 1; lives = 7; isGameOver = false;
+            document.getElementById('attempts-text').innerText = "Осталось попыток: 7/7";
+            document.getElementById('guess-feedback').innerText = "";
+            document.getElementById('user-guess-input').value = ""; document.getElementById('user-guess-input').disabled = false;
+        }        function checkUserGuess(e) {
+            e.stopPropagation(); if (isGameOver) return;
+            const input = document.getElementById('user-guess-input');
+            const guess = parseInt(input.value);
+            const fb = document.getElementById('guess-feedback');
+            if (isNaN(guess) || guess < 1 || guess > 100) { fb.innerText = "⚠️ Введи число от 1 до 100!"; return; }
+            lives--; document.getElementById('attempts-text').innerText = "Осталось попыток: " + lives + "/7";
+            if (guess === secretNum) {
+                fb.innerText = "🎉 УРААА! Ты угадал! Это было число " + secretNum + "! 🎆";
+                document.getElementById('attempts-text').innerText = "🏆 ПОБЕДА!";
+                input.disabled = true; isGameOver = true; bigCelebration();
+            } else if (lives <= 0) {
+                fb.innerText = "💥 Конец игры! Число было: " + secretNum;
+                input.disabled = true; isGameOver = true;
+            } else {
+                fb.innerText = "❌ Мимо! Моё число " + (guess < secretNum ? "БОЛЬШЕ ⬆️" : "МЕНЬШЕ ⬇️");
+            }
+        }
+
+        function startQuizGame() {
+            hideAllScreens(); document.getElementById('quiz-game-screen').style.display = 'block';
+            currentQuizIndex = 0; showQuizQuestion();
+        }
+
+        function showQuizQuestion() {
+            if(currentQuizIndex >= QUIZ_DATA.length) {
+                document.getElementById('quiz-question-text').innerText = "🏆 Квиз пройден! Ты супер-мозг!";
+                document.getElementById('quiz-feedback').innerText = "🎉 Все вопросы решены!"; bigCelebration();
+                return;
+            }
+            const q = QUIZ_DATA[currentQuizIndex];
+            document.getElementById('quiz-question-text').innerText = q.q;
+            document.getElementById('quiz-btn-A').innerText = q.a;
+            document.getElementById('quiz-btn-Б').innerText = q.b;
+            document.getElementById('quiz-btn-В').innerText = q.c;
+            document.getElementById('quiz-btn-Г').innerText = q.d;
+            document.getElementById('quiz-feedback').innerText = "";
+        }
+
+        function checkQuizAnswer(letter, e) {
+            e.stopPropagation();
+            if(currentQuizIndex >= QUIZ_DATA.length) return;
+            const q = QUIZ_DATA[currentQuizIndex];
+            const fb = document.getElementById('quiz-feedback');
+            if (letter === q.ok) {
+                fb.style.color = "#6fffe9"; fb.innerText = "🎉 Верно! Лови следующий вопрос..."; bigCelebration();
+                currentQuizIndex++; setTimeout(showQuizQuestion, 1500);
+            } else { fb.style.color = "#ff0055"; fb.innerText = "❌ Ошибка! Попробуй ещё раз!"; }
+        }
+
+        function startCasesGame() {
+            hideAllScreens(); document.getElementById('cases-game-screen').style.display = 'block';
+            currentCaseIndex = 0; showCaseQuestion();
+        }
+
+        function showCaseQuestion() {
+            if(currentCaseIndex >= CASE_DATA.length) {
+                document.getElementById('case-phrase-text').innerText = "🏆 Учительница ставит ПЯТЁРКУ!";
+                document.getElementById('cases-feedback').innerText = "🎉 Все падежи определены идеально!"; bigCelebration();
+                return;
+            }
+            document.getElementById('case-phrase-text').innerText = CASE_DATA[currentCaseIndex].p;
+            document.getElementById('cases-feedback').innerText = "";
+        }
+
+        function checkCaseAnswer(choice, e) {
+            e.stopPropagation();
+            if(currentCaseIndex >= CASE_DATA.length) return;
+            const c = CASE_DATA[currentCaseIndex];
+            const fb = document.getElementById('cases-feedback');
+            if (choice === c.ok) {
+                fb.style.color = "#6fffe9"; fb.innerText = "🎉 Блестяще! Это " + c.h + "!"; bigCelebration();
+                currentCaseIndex++; setTimeout(showCaseQuestion, 1800);
+            } else { fb.style.color = "#ff0055"; fb.innerText = "❌ Ой, мимо! Подумай над вопросами фраз!"; }
+        }
+
+        function startTimeGame() {
+            hideAllScreens(); document.getElementById('time-game-screen').style.display = 'block';
+            timeScore = 0; isTimeGameOver = false; timeLeft = 100;
+            document.getElementById('time-score-text').innerText = "Решено примеров: 0/10";
+            document.getElementById('time-feedback').innerText = "";
+            document.getElementById('user-time-input').value = "";
+            document.getElementById('user-time-input').disabled = false;
+            generateTimeExample();
+            
+            if(timeInterval) clearInterval(timeInterval);
+            timeInterval = setInterval(() => {
+                if(isTimeGameOver) return;
+                timeLeft -= 0.5;
+                document.getElementById('time-bar-element').style.width = timeLeft + "%";
+                if(timeLeft <= 0) {
+                    clearInterval(timeInterval);
+                    isTimeGameOver = true;
+                    document.getElementById('time-feedback').style.color = "#ff0055";
+                    document.getElementById('time-feedback').innerText = "💥 Время истекло! Игра взорвалась! Попей водички 🥤";
+                    document.getElementById('user-time-input').disabled = true;
+                }
+            }, 100);
+        }
+
+        function generateTimeExample() {
+            if(timeScore >= 10) {
+                clearInterval(timeInterval);
+                isTimeGameOver = true;
+                document.getElementById('time-example-text').innerText = "🏆 МЕГА-ПОБЕДА!";
+                document.getElementById('time-feedback').style.color = "#ffea00";
+                document.getElementById('time-feedback').innerHTML = "🎉 Секретный приз: Твой секретный код доступа: <b>[MAX-PRO-2026]</b>!";
+                document.getElementById('user-time-input').disabled = true;
+                bigCelebration();
+                return;
+            }
+            let ops = ['+', '-'];
+            let op = ops[Math.floor(Math.random() * ops.length)];
+            let n1 = Math.floor(Math.random() * 50) + 1;
+            let n2 = Math.floor(Math.random() * 50) + 1;
+            if(op === '-' && n1 < n2) { let t = n1; n1 = n2; n2 = t; }
+            timeCorrectAnswer = op === '+' ? (n1 + n2) : (n1 - n2);
+            document.getElementById('time-example-text').innerText = n1 + " " + op + " " + n2 + " = ?";
+            document.getElementById('user-time-input').value = "";
+        }
+
+        function checkTimeAnswer(e) {
+            e.stopPropagation(); if(isTimeGameOver) return;
+            const input = document.getElementById('user-time-input');
+            const ans = parseInt(input.value);
+            const fb = document.getElementById('time-feedback');
+            if(ans === timeCorrectAnswer) {
+                timeScore++;
+                document.getElementById('time-score-text').innerText = "Решено примеров: " + timeScore + "/10";
+                fb.style.color = "#6fffe9"; fb.innerText = "🎉 Точно! +Время!";
+                timeLeft = Math.min(100, timeLeft + 15);
+                bigCelebration();
+                generateTimeExample();
+            } else {
+                fb.style.color = "#ff0055"; fb.innerText = "❌ Неверно! Пробуй ещё раз!";
+            }
+        }
+
+        function hideAllScreens() {
+            document.getElementById('main-menu').style.display = 'none';
+            document.getElementById('guess-game-screen').style.display = 'none';
+            document.getElementById('quiz-game-screen').style.display = 'none';
+            document.getElementById('cases-game-screen').style.display = 'none';
+            document.getElementById('time-game-screen').style.display = 'none';
+            if(timeInterval) { clearInterval(timeInterval); }
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                if (document.getElementById('guess-game-screen').style.display === 'block') {
+                    checkUserGuess(event);
+                } else if (document.getElementById('time-game-screen').style.display === 'block') {
+                    checkTimeAnswer(event);
+                }
+            }
+        });
+
+        function backToMenu() {
+            hideAllScreens(); document.getElementById('main-menu').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
