@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Игровая Империя Дани v6.1</title>
+    <style>
+        body {
+            background-color: #0b132b;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(28, 37, 65, 0.8) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(58, 80, 107, 0.6) 0%, transparent 45%);
+            color: #ffffff;
+            text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 10px;
+            margin: 0;
+            overflow-y: auto;
+            min-height: 100vh;
+            user-select: none;
+        }
+        .profile-bar {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(28, 37, 65, 0.8);
+            border-bottom: 2px solid #00b4d8;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #6fffe9;
+            box-shadow: 0 4px 15px rgba(0, 180, 216, 0.2);
+            position: sticky; top: 0; z-index: 100;
+        }
+        h1 {
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px #00b4d8;
+            margin-top: 15px; margin-bottom: 5px;
+        }
+        p { color: #6fffe9; font-size: 14px; }
+        .btn-game {
+            display: block; width: 280px; margin: 10px auto;
+            padding: 12px 25px; font-size: 16px; font-weight: bold; color: #ffffff;
+            background: linear-gradient(135deg, #00b4d8 0%, #5e60ce 100%);
+            border: none; border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0, 180, 216, 0.4);
+            cursor: pointer; transition: all 0.2s ease; 
+        }
+        .btn-game:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 20px #6fffe9;
+        }
+        .quest-box {
+            background: rgba(28, 37, 65, 0.5); border: 1px dashed #00b4d8;
+            border-radius: 15px; width: 290px; margin: 10px auto; padding: 10px;
+            text-align: left; font-size: 13px;
+        }
+        .quest-item {
+            display: flex; justify-content: space-between;
+            margin: 5px 0; padding-bottom: 5px; border-bottom: 1px solid rgba(111, 255, 233, 0.2);
+        }
+        .grid-container {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 320px; margin: 15px auto;
+        }
+        .btn-variant {
+            padding: 12px; font-size: 15px; font-weight: bold; color: #ffffff;
+            background: #1c2541; border: 2px solid #3a506b; border-radius: 15px; cursor: pointer;
+        }
+        .input-number {
+            font-size: 22px; padding: 8px; width: 110px; text-align: center;
+            border: 2px solid #00b4d8; border-radius: 15px; background-color: #1c2541;
+            color: #6fffe9; outline: none; margin: 10px auto; display: block;
+        }
+        .game-screen { display: none; margin-top: 10px; padding: 15px; }
+        .timer-container {
+            width: 280px; height: 15px; background: #1c2541; border: 2px solid #00b4d8; border-radius: 10px; margin: 10px auto; overflow: hidden;
+        }
+        .timer-bar { width: 100%; height: 100%; background: linear-gradient(90deg, #6fffe9, #00b4d8); }
+        .star { position: absolute; pointer-events: none; font-size: 24px; animation: fly 0.6s ease-out forwards; }
+        @keyframes fly {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--mx), var(--my)) scale(0.2); opacity: 0; }
+        }
+        .wheel-btn { background: linear-gradient(135deg, #ff007f 0%, #7f00ff 100%) !important; }
+        .inv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 290px; margin: 15px auto; }
+        .inv-cell { background: #1c2541; border: 2px solid #3a506b; border-radius: 12px; padding: 10px; font-size: 24px; cursor: pointer; }
+        .inv-active { border-color: #6fffe9 !important; background: rgba(0, 180, 216, 0.3); }
+        .clicker-circle { width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle, #00b4d8, #5e60ce); box-shadow: 0 0 20px #6fffe9; margin: 20px auto; display: flex; align-items: center; justify-content: center; font-size: 36px; cursor: pointer; transition: transform 0.05s ease; }
+        .clicker-circle:active { transform: scale(0.95); }
+    </style>
+</head>
+<body onclick="spawnStars(event)">
+
+    <div class="profile-bar">
+        <div>🪙 Золото: <span id="coins-display">0</span></div>
+        <div>🏆 Ранг: <span id="rank-display">🟢 Нубик</span></div>
+    </div>
+    <div id="main-menu">
+        <h1>🎉 ИГРОВАЯ ИМПЕРИЯ v6.1 🎉</h1>
+        <p>⚔️ Сезон Дуэлей, Сундуков и Хакерских Игр открыт! ⚔️</p>
+
+        <div class="quest-box">
+            <b style="color: #ffea00; font-size: 14px;">🎯 Ежедневные Квесты:</b>
+            <div class="quest-item"><span>🎲 Разгадать число (0/1)</span><b id="q-guess-status" style="color:#ff0055;">+20🪙</b></div>
+            <div class="quest-item"><span>💡 Пройти весь Квиз (0/1)</span><b id="q-quiz-status" style="color:#ff0055;">+30🪙</b></div>
+            <div class="quest-item"><span>⚡ Спидран на время (0/1)</span><b id="q-time-status" style="color:#ff0055;">+50🪙</b></div>
+        </div>
+
+        <div style="margin-top: 15px;">
+            <button class="btn-game wheel-btn" id="main-wheel-btn" onclick="openWheel()">🎡 Колесо Удачи (1 спин)</button>
+            <button class="btn-game" style="background: linear-gradient(135deg, #e63946 0%, #1d3557 100%);" onclick="startPvPGame()">⚔️ PvP Дуэль с ботом-хакером</button>
+            
+            <button class="btn-game" onclick="startGuessGame()">🎲 Угадай число</button>
+            <button class="btn-game" onclick="startQuizGame()">💡 Викторина-Квиз</button>
+            <button class="btn-game" onclick="startCasesGame()">📝 Охота за падежами</button>
+            <button class="btn-game" style="background: linear-gradient(135deg, #ff0055 0%, #ffaa00 100%);" onclick="startTimeGame()">⚡ Спидран: На время!</button>
+            
+            <button class="btn-game" style="background: linear-gradient(135deg, #2a9d8f 0%, #264653 100%);" onclick="startClickerGame()">🕹️ Игра №1: Хакерский Кликер</button>
+            <button class="btn-game" style="background: linear-gradient(135deg, #a8dadc 0%, #457b9d 100%);" onclick="startSniperGame()">🎯 Игра №2: Словесный Снайпер</button>
+            
+            <button class="btn-game" style="background: linear-gradient(135deg, #ffb703 0%, #fb8500 100%);" onclick="openShop()">🏪 Магазин скинов</button>
+            <button class="btn-game" style="background: linear-gradient(135deg, #ff70a6 0%, #ff9770 100%);" onclick="openChestScreen()">📦 Тайный Сундук (40🪙)</button>
+            <button class="btn-game" style="background: linear-gradient(135deg, #4ea8de 0%, #56cfe1 100%);" onclick="openInventory()">🎒 Мой Рюкзак (Инвентарь)</button>
+        </div>
+    </div>
+
+    <div id="guess-game-screen" class="game-screen">
+        <h2>🎲 Игра: Угадай Число</h2>
+        <p>Я загадал число от 1 до 100. У тебя 7 попыток!</p>
+        <p style="font-size: 20px; font-weight: bold; color: #ffea00;" id="attempts-text">Осталось попыток: 7/7</p>
+        <input type="number" id="user-guess-input" class="input-number" min="1" max="100" placeholder="0">
+        <p id="guess-feedback" style="font-size: 22px; font-weight: bold; color: #6fffe9; min-height: 30px;"></p>
+        <button class="btn-game" onclick="checkUserGuess(event)">🔥 Проверить!</button>
+        <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
+    </div>
+
+    <div id="quiz-game-screen" class="game-screen">
+        <h2>💡 Викторина-Квиз</h2>
+        <p style="font-size: 22px; font-weight: bold; color: #6fffe9; margin-bottom: 20px;" id="quiz-question-text">Вопрос</p>
+        <div class="grid-container">
+            <button class="btn-variant" onclick="checkQuizAnswer('А', event)" id="quiz-btn-A">А</button>
+            <button class="btn-variant" onclick="checkQuizAnswer('Б', event)" id="quiz-btn-Б">Б</button>
+            <button class="btn-variant" onclick="checkQuizAnswer('В', event)" id="quiz-btn-В">В</button>
+            <button class="btn-variant" onclick="checkQuizAnswer('Г', event)" id="quiz-btn-Г">Г</button>
+        </div>
+        <p id="quiz-feedback" style="font-size: 20px; font-weight: bold; min-height: 30px;"></p>
+        <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
+    </div>
+
+    <div id="cases-game-screen" class="game-screen">
+        <h2>📝 Охота за падежами</h2>
+        <p style="font-size: 18px;">Определи падеж весёлой фразы:</p>
+        <p style="font-size: 24px; font-weight: bold; color: #ffea00; margin-bottom: 25px;" id="case-phrase-text">Фраза</p>
+        <div class="grid-container" style="grid-template-columns: 1fr 1fr 1fr; width: 360px;">
+            <button class="btn-variant" onclick="checkCaseAnswer('И.п.', event)">И.п.</button>
+            <button class="btn-variant" onclick="checkCaseAnswer('Р.п.', event)">Р.п.</button>
+            <button class="btn-variant" onclick="checkCaseAnswer('Д.п.', event)">Д.п.</button>
+            <button class="btn-variant" onclick="checkCaseAnswer('В.п.', event)">В.п.</button>
+            <button class="btn-variant" onclick="checkCaseAnswer('Т.п.', event)">Т.п.</button>
+            <button class="btn-variant" onclick="checkCaseAnswer('П.п.', event)">П.п.</button>
+        </div>
+        <p id="cases-feedback" style="font-size: 20px; font-weight: bold; min-height: 30px;"></p>
+        <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
+    </div>
+
+    <div id="time-game-screen" class="game-screen">
+        <h2>⚡ Математика на время!</h2>
+        <p style="font-size: 18px;">Реши 10 примеров подряд, пока тикает таймер!</p>
+        <p style="font-size: 22px; font-weight: bold; color: #ffea00;" id="time-score-text">Решено примеров: 0/10</p>
+        <div class="timer-container"><div id="time-bar-element" class="timer-bar"></div></div>
+        <p style="font-size: 26px; font-weight: bold; color: #ffffff; margin: 15px;" id="time-example-text">Пример</p>
+        <input type="number" id="user-time-input" class="input-number" placeholder="?">
+        <p id="time-feedback" style="font-size: 20px; font-weight: bold; min-height: 30px;"></p>
+        <button class="btn-game" onclick="checkTimeAnswer(event)">🔥 Проверить!</button>
+        <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
+    </div>
+
+    <div id="shop-screen" class="game-screen">
+        <h2>🏪 Магазин Эффектов Клика</h2>
+        <p>Покупай крутые скины за золото!</p>
+        <div style="margin-top: 20px;">
+            <button class="btn-game" style="background: #3a506b;" onclick="buySkin('⭐', 0, event)">⭐ Обычные Звёзды (Бесплатно)</button>
+            <button class="btn-game" style="background: #ffaa00;" onclick="buySkin('🔥', 50, event)">🔥 Огненный Салют (50 монет)</button>
+            <button class="btn-game" style="background: #ff0055;" onclick="buySkin('🐈', 100, event)">🐈 Пушистый Кошак (100 монет)</button>
+        </div>
+        <p id="shop-feedback" style="font-size: 20px; font-weight: bold; color: #ffea00; min-height: 30px;"></p>
+        <button class="btn-game" style="background: #ff0055; margin-top: 30px;" onclick="backToMenu()">↩️ Назад в меню</button>
+    </div>
+
+    <div id="wheel-screen" class="game-screen">
+        <h2>🎡 Колесо Удачи</h2>
+        <p>Испытай удачу строго один раз в день!</p>
+        <div style="font-size: 80px; margin: 30px;" id="wheel-anim-box">🎁</div>
+        <button class="btn-game wheel-btn" id="spin-action-btn" onclick="spinTheWheel(event)">🚀 КРУТИТЬ КОЛЕСО!</button>
+        <p id="wheel-feedback" style="font-size: 22px; font-weight: bold; color: #ffea00; min-height: 30px;"></p>
+        <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
+    </div>
+
+    <div id="inventory-screen" class="game-screen">
+        <h2>🎒 Твой Личный Рюкзак</h2>
+        <p>Выбирай и экипируй свои скины здесь!</p>
+        <div class="inv-grid" id="inventory-cells-box"></div>
+        <p id="inv-feedback" style="font-size: 20px; font-weight: bold; color: #6fffe9; min-height: 30px;"></p>
+        <button class="btn-game" style="background: #ff0055; margin-top: 30px;" onclick="backToMenu()">↩️ Назад в меню</button>
+    </div>
+
+    <div id="clicker-game-screen" class="game-screen">
+        <h2>🕹️ Хакерский Кликер</h2>
+        <p>Тапай по серверу, чтобы получать монеты!</p>
+        <div class="clicker-circle" onclick="tapServer(event)">🖥️</div>
+        <p style="font-size: 20px; font-weight: bold; color: #6fffe9;" id="clicker-score-text">Добыто за сессию: 0🪙</p>
+        <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Сдать золото и выйти</button>
+    </div>
+
+    <div id="sniper-game-screen" class="game-screen">
+        <h2>🎯 Словесный Снайпер</h2>
+        <p>Найди правильный хакерский термин!</p>
+        <p style="font-size: 20px; color: #ffea00; font-weight: bold;" id="sniper-desc-text">Описание термина</p>
+        <div class="grid-container" id="sniper-buttons-box"></div>
+        <p id="sniper-feedback" style="font-size: 20px; font-weight: bold; min-height: 30px;"></p>
+        <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
+    </div>
+
+    <div id="pvp-game-screen" class="game-screen">
+        <h2>⚔️ PvP Дуэль с Ботом-Хакером</h2>
+        <p>Реши пример быстрее ИИ! Ставка: 50🪙.</p>
+        <p style="font-size: 26px; font-weight: bold; color: #ffffff; margin: 15px;" id="pvp-example-text">Пример</p>
+        <input type="number" id="user-pvp-input" class="input-number" placeholder="?">
+        <p id="pvp-feedback" style="font-size: 22px; font-weight: bold; min-height: 30px;"></p>
+        <button class="btn-game" onclick="checkPvPAnswer(event)">🔥 Нанести удар!</button>
+        <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Сдаться</button>
+    </div>
+
+    <div id="chest-game-screen" class="game-screen">
+        <h2>📦 Тайный Сундук</h2>
+        <p>Стоимость: 40🪙. Выбей Бриллиант!</p>
+        <div style="font-size: 90px; margin: 20px;" id="chest-anim-box">📦</div>
+        <button class="btn-game" style="background: #ff70a6;" id="chest-open-btn" onclick="openSecretChest(event)">🔓 Открыть сундук!</button>
+        <p id="chest-feedback" style="font-size: 22px; font-weight: bold; color: #ffea00; min-height: 30px;"></p>
+        <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
+    </div>
+    <script>
+        function playSound(type) {
+            try {
+                let ctx = new (window.AudioContext || window.webkitAudioContext)();
+                let osc = ctx.createOscillator(); let gain = ctx.createGain();
+                osc.connect(gain); gain.connect(ctx.destination);
+                if (type === 'click') {
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(600, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                    osc.start(); osc.stop(ctx.currentTime + 0.05);
+                } else if (type === 'win') {
+                    osc.type = 'triangle'; osc.frequency.setValueAtTime(800, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                    osc.start(); osc.stop(ctx.currentTime + 0.1);
+                    setTimeout(() => {
+                        let osc2 = ctx.createOscillator(); let gain2 = ctx.createGain();
+                        osc2.connect(gain2); gain2.connect(ctx.destination);
+                        osc2.type = 'triangle'; osc2.frequency.setValueAtTime(1200, ctx.currentTime);
+                        gain2.gain.setValueAtTime(0.15, ctx.currentTime);
+                        osc2.start(); osc2.stop(ctx.currentTime + 0.15);
+                    }, 100);
+                }
+            } catch (e) {}
+        }
+
+        const QUIZ_DATA = [
+            {"q": "Какой язык программирования назван в честь змеи? 🐍", "a": "А) JavaScript", "b": "Б) Python", "c": "В) С++", "d": "Г) Скретч", "ok": "Б"},
+            {"q": "Что программисты называют 'деплоем'? ☁️", "a": "А) Перенос на сервер", "b": "Б) Поход за чипсами", "c": "В) Ошибку в коде", "d": "Г) Сон", "ok": "А"},
+            {"q": "Лимит знаков в одном сообщении Telegram? 📜", "a": "А) 100", "b": "Б) 1000", "c": "В) 4096", "d": "Г) Нет лимита", "ok": "В"}
+        ];
+
+        const CASE_DATA = [
+            {"p": "Горжусь (кем? чем?) любимым роботом 🤖", "ok": "Т.п.", "h": "Творительный (кем? чем?)"},
+            {"p": "Радуюсь (кому? чему?) отмене внеурочки! 🎉", "ok": "Д.п.", "h": "Дательный (кому? чему?)"},
+            {"p": "Вижу (кого? что?) вечный сервер ☁️", "ok": "В.п.", "h": "Винительный (кого? что?)"},
+            {"p": "Думаю о (ком? чём?) крутом Mini App 🚀", "ok": "П.п.", "h": "Предложный (о ком? о чём?)"}
+        ];
+
+        const SNIPER_DATA = [
+            {"d": "Секретная папка с кодом проекта на сервере:", "variants": ["Репозиторий", "Блокнот", "Скрепка"], "ok": "Репозиторий"},
+            {"d": "Ошибка или опечатка в коде, которая всё ломает:", "variants": ["Баг", "Деплой", "Скриншот"], "ok": "Баг"},
+            {"d": "Процесс загрузки готового сайта в интернет:", "variants": ["Деплой", "Кадрирование", "Спидран"], "ok": "Деплой"}
+        ];
+
+        let coins = parseInt(localStorage.getItem('danya_coins')) || 0;
+        let totalWins = parseInt(localStorage.getItem('danya_wins')) || 0;
+        let activeSkin = localStorage.getItem('danya_skin') || '⭐';
+        let boughtSkins = JSON.parse(localStorage.getItem('danya_bought')) || ['⭐'];
+        
+        let qGuessDone = localStorage.getItem('dq_guess') === 'true';
+        let qQuizDone = localStorage.getItem('dq_quiz') === 'true';
+        let qTimeDone = localStorage.getItem('dq_time') === 'true';
+        let lastWheelDate = localStorage.getItem('danya_last_wheel') || '';
+
+        let secretNum, lives, isGameOver = false;
+        let currentQuizIndex = 0; let currentCaseIndex = 0; let currentSniperIndex = 0;
+        let timeScore = 0; let timeCorrectAnswer = 0; let pvpCorrectAnswer = 0;
+        let timeLeft = 100; let timeInterval = null; let isTimeGameOver = false;
+        let clickerSessionCoins = 0;
+
+        updateProfileDisplay();
+        renderQuests();
+
+        function updateProfileDisplay() {
+            document.getElementById('coins-display').innerText = coins;
+            let r = "🟢 Нубик";
+            if(totalWins >= 5) r = "🤖 Ученик Дани";
+            if(totalWins >= 15) r = "🖥️ Хакер Acer";
+            if(totalWins >= 30) r = "👑 Император Даня";
+            document.getElementById('rank-display').innerText = r;
+            localStorage.setItem('danya_coins', coins);
+            localStorage.setItem('danya_wins', totalWins);
+            localStorage.setItem('danya_skin', activeSkin);
+            localStorage.setItem('danya_bought', JSON.stringify(boughtSkins));
+            localStorage.setItem('danya_last_wheel', lastWheelDate);
+        }
+        function renderQuests() {
+            document.getElementById('q-guess-status').innerText = qGuessDone ? "✅ Выполнен" : "+20🪙";
+            document.getElementById('q-guess-status').style.color = qGuessDone ? "#6fffe9" : "#ff0055";
+            document.getElementById('q-quiz-status').innerText = qQuizDone ? "✅ Выполнен" : "+30🪙";
+            document.getElementById('q-quiz-status').style.color = qQuizDone ? "#6fffe9" : "#ff0055";
+            document.getElementById('q-time-status').innerText = qTimeDone ? "✅ Выполнен" : "+50🪙";
+            document.getElementById('q-time-status').style.color = qTimeDone ? "#6fffe9" : "#ff0055";
+            localStorage.setItem('dq_guess', qGuessDone);
+            localStorage.setItem('dq_quiz', qQuizDone);
+            localStorage.setItem('dq_time', qTimeDone);
+        }
+
+        function spawnStars(e) {
+            try { playSound('click'); } catch(err){}
+            for (let i = 0; i < 10; i++) {
+                const star = document.createElement('div');
+                star.className = 'star'; star.innerText = activeSkin;
+                star.style.left = (e.clientX - 12) + 'px'; star.style.top = (e.clientY - 12) + 'px';
+                const angle = Math.random() * Math.PI * 2; const dist = 30 + Math.random() * 70;
+                star.style.setProperty('--mx', Math.cos(angle) * dist + 'px');
+                star.style.setProperty('--my', Math.sin(angle) * dist + 'px');
+                document.body.appendChild(star);
+                setTimeout(() => star.remove(), 600);
+            }
+        }
+
+        function bigCelebration(rewardCoins = 15) {
+            try { playSound('win'); } catch(err){}
+            totalWins++; coins += rewardCoins; updateProfileDisplay();
+            for(let i=0; i<30; i++) { 
+                setTimeout(() => {
+                    spawnStars({clientX: Math.random() * window.innerWidth, clientY: Math.random() * window.innerHeight});
+                }, i * 60);
+            }
+        }
+
+        function startGuessGame() {
+            hideAllScreens(); document.getElementById('guess-game-screen').style.display = 'block';
+            secretNum = Math.floor(Math.random() * 100) + 1; lives = 7; isGameOver = false;
+            document.getElementById('attempts-text').innerText = "Осталось попыток: 7/7";
+            document.getElementById('guess-feedback').innerText = "";
+            document.getElementById('user-guess-input').value = ""; document.getElementById('user-guess-input').disabled = false;
+        }
+
+        function checkUserGuess(e) {
+            if(e) e.stopPropagation(); if (isGameOver) return;
+            const input = document.getElementById('user-guess-input'); const guess = parseInt(input.value);
+            const fb = document.getElementById('guess-feedback');
+            if (isNaN(guess) || guess < 1 || guess > 100) { fb.innerText = "⚠️ Введи число от 1 до 100!"; return; }
+            lives--; document.getElementById('attempts-text').innerText = "Осталось попыток: " + lives + "/7";
+            if (guess === secretNum) {
+                fb.innerText = "🎉 УРААА! Число разгадано: " + secretNum;
+                input.disabled = true; isGameOver = true;
+                let reward = 15; if (!qGuessDone) { qGuessDone = true; reward += 20; renderQuests(); }
+                bigCelebration(reward);
+            } else if (lives <= 0) {
+                fb.innerText = "💥 Конец игры! Было загадано: " + secretNum; input.disabled = true; isGameOver = true;
+            } else { fb.innerText = "❌ Моё число " + (guess < secretNum ? "БОЛЬШЕ ⬆️" : "МЕНЬШЕ ⬇️"); }
+        }
+
+        function startQuizGame() { hideAllScreens(); document.getElementById('quiz-game-screen').style.display = 'block'; currentQuizIndex = 0; showQuizQuestion(); }
+        function showQuizQuestion() {
+            if(currentQuizIndex >= QUIZ_DATA.length) {
+                document.getElementById('quiz-question-text').innerText = "🏆 Квиз пройден!";
+                let reward = 15; if (!qQuizDone) { qQuizDone = true; reward += 30; renderQuests(); }
+                bigCelebration(reward); return;
+            }
+            const q = QUIZ_DATA[currentQuizIndex]; document.getElementById('quiz-question-text').innerText = q.q;
+            document.getElementById('quiz-btn-A').innerText = q.a; document.getElementById('quiz-btn-Б').innerText = q.b;
+            document.getElementById('quiz-btn-В').innerText = q.c; document.getElementById('quiz-btn-Г').innerText = q.d;
+            document.getElementById('quiz-feedback').innerText = "";
+        }
+        function checkQuizAnswer(letter, e) {
+            if(e) e.stopPropagation(); if(currentQuizIndex >= QUIZ_DATA.length) return;
+            if (letter === QUIZ_DATA[currentQuizIndex].ok) { currentQuizIndex++; showQuizQuestion(); }
+            else { document.getElementById('quiz-feedback').innerText = "❌ Неверно!"; }
+        }
+        function startCasesGame() { hideAllScreens(); document.getElementById('cases-game-screen').style.display = 'block'; currentCaseIndex = 0; showCaseQuestion(); }
+        function showCaseQuestion() {
+            if(currentCaseIndex >= CASE_DATA.length) {
+                document.getElementById('case-phrase-text').innerText = "🏆 ПЯТЁРКА ОТ УЧИТЕЛЬНИЦЫ!";
+                bigCelebration(15); return;
+            }
+            document.getElementById('case-phrase-text').innerText = CASE_DATA[currentCaseIndex].p; document.getElementById('cases-feedback').innerText = "";
+        }
+        function checkCaseAnswer(choice, e) {
+            if(e) e.stopPropagation(); if(currentCaseIndex >= CASE_DATA.length) return;
+            if (choice === CASE_DATA[currentCaseIndex].ok) { currentCaseIndex++; showCaseQuestion(); }
+            else { document.getElementById('cases-feedback').innerText = "❌ Мимо!"; }
+        }
+
+        function startTimeGame() {
+            hideAllScreens(); document.getElementById('time-game-screen').style.display = 'block';
+            timeScore = 0; isTimeGameOver = false; timeLeft = 100;
+            document.getElementById('time-score-text').innerText = "Решено примеров: 0/10"; document.getElementById('time-feedback').innerText = "";
+            document.getElementById('user-time-input').value = ""; document.getElementById('user-time-input').disabled = false;
+            generateTimeExample();
+            if(timeInterval) clearInterval(timeInterval);
+            timeInterval = setInterval(() => {
+                if(isTimeGameOver) return; timeLeft -= 0.6;
+                document.getElementById('time-bar-element').style.width = timeLeft + "%";
+                if(timeLeft <= 0) { clearInterval(timeInterval); isTimeGameOver = true; document.getElementById('time-feedback').innerText = "💥 Время вышло!"; document.getElementById('user-time-input').disabled = true; }
+            }, 100);
+        }
+        function generateTimeExample() {
+            if(timeScore >= 10) { 
+                clearInterval(timeInterval); isTimeGameOver = true; document.getElementById('time-example-text').innerText = "🏆 СЕКРЕТНЫЙ КОД: [MAX-PRO-2026]";
+                let reward = 15; if (!qTimeDone) { qTimeDone = true; reward += 50; renderQuests(); }
+                bigCelebration(reward); return; 
+            }
+            let n1 = Math.floor(Math.random() * 40) + 10; let n2 = Math.floor(Math.random() * 30) + 1;
+            timeCorrectAnswer = n1 + n2; document.getElementById('time-example-text').innerText = n1 + " + " + n2 + " = ?";
+            document.getElementById('user-time-input').value = "";
+        }
+        function checkTimeAnswer(e) {
+            if(e) e.stopPropagation(); if(isTimeGameOver) return;
+            if(parseInt(document.getElementById('user-time-input').value) === timeCorrectAnswer) { timeScore++; document.getElementById('time-score-text').innerText = "Решено: " + timeScore + "/10"; timeLeft = Math.min(100, timeLeft + 15); generateTimeExample(); }
+            else { document.getElementById('time-feedback').innerText = "❌ Ошибка!"; }
+        }
+
+        function openShop() { hideAllScreens(); document.getElementById('shop-screen').style.display = 'block'; document.getElementById('shop-feedback').innerText = ""; }
+        function buySkin(skinSymbol, cost, e) {
+            if(e) e.stopPropagation();
+            if (boughtSkins.includes(skinSymbol)) { document.getElementById('shop-feedback').innerText = "🎒 Этот скин уже у тебя в Рюкзаке!"; return; }
+            if (coins >= cost) { coins -= cost; boughtSkins.push(skinSymbol); document.getElementById('shop-feedback').innerText = "🎉 Куплено! Вещь добавлена в Рюкзак!"; updateProfileDisplay(); }
+            else { document.getElementById('shop-feedback').innerText = "❌ Не хватает золота!"; }
+        }
+
+        function openWheel() {
+            hideAllScreens(); document.getElementById('wheel-screen').style.display = 'block'; document.getElementById('wheel-feedback').innerText = "";
+            let today = new Date().toDateString();
+            if (lastWheelDate === today) { document.getElementById('wheel-feedback').innerText = "⚠️ Упс! Лимит исчерпан. Возвращайся завтра!"; document.getElementById('spin-action-btn').disabled = true; }
+            else { document.getElementById('spin-action-btn').disabled = false; }
+        }
+        function spinTheWheel(e) {
+            if(e) e.stopPropagation(); document.getElementById('spin-action-btn').disabled = true;
+            lastWheelDate = new Date().toDateString();
+            let items = ['🪙10', '🪙30', '🪙100', '🔥', '🐈', '💩'];
+            let box = document.getElementById('wheel-anim-box'); let idx = 0;
+            let intr = setInterval(() => { box.innerText = items[idx]; idx = (idx + 1) % items.length; }, 100);
+            setTimeout(() => {
+                clearInterval(intr); let finalPrize = items[Math.floor(Math.random() * items.length)]; box.innerText = finalPrize;
+                if (finalPrize === '🪙10') { coins += 10; document.getElementById('wheel-feedback').innerText = "🎉 +10 монет!"; }
+                else if (finalPrize === '🪙30') { coins += 30; document.getElementById('wheel-feedback').innerText = "🎉 +30 монет!"; }
+                else if (finalPrize === '🪙100') { coins += 100; document.getElementById('wheel-feedback').innerText = "🔥 МЕГА-ДЖЕКПОТ! +100 МОНЕТ!"; }
+                else if (finalPrize === '💩') { document.getElementById('wheel-feedback').innerText = "💩 Скин добавлен в рюкзак!"; if(!boughtSkins.includes('💩')) boughtSkins.push('💩'); }
+                else { document.getElementById('wheel-feedback').innerText = "✨ Выпал редкий скин: " + finalPrize; if(!boughtSkins.includes(finalPrize)) boughtSkins.push(finalPrize); }
+                bigCelebration(0);
+            }, 2000);
+        }
+
+        function openInventory() {
+            hideAllScreens(); document.getElementById('inventory-screen').style.display = 'block';
+            let box = document.getElementById('inventory-cells-box'); box.innerHTML = "";
+            boughtSkins.forEach(skin => {
+                let cell = document.createElement('div'); cell.className = 'inv-cell' + (activeSkin === skin ? ' inv-active' : ''); cell.innerText = skin;
+                cell.onclick = (e) => { if(e) e.stopPropagation(); activeSkin = skin; document.getElementById('inv-feedback').innerText = "🎯 Экипирован эффект: " + skin; updateProfileDisplay(); openInventory(); };
+                box.appendChild(cell);
+            });
+        }
+
+        function startClickerGame() { hideAllScreens(); document.getElementById('clicker-game-screen').style.display = 'block'; clickerSessionCoins = 0; document.getElementById('clicker-score-text').innerText = "Добыто за сессию: 0🪙"; }
+        function tapServer(e) { if(e) e.stopPropagation(); clickerSessionCoins++; coins++; document.getElementById('clicker-score-text').innerText = "Добыто за сессию: " + clickerSessionCoins + "🪙"; updateProfileDisplay(); }
+
+        function startSniperGame() { hideAllScreens(); document.getElementById('sniper-game-screen').style.display = 'block'; currentSniperIndex = 0; showSniperQuestion(); }
+        function showSniperQuestion() {
+            if(currentSniperIndex >= SNIPER_DATA.length) { document.getElementById('sniper-desc-text').innerText = "🏆 ТЫ ИСТИННЫЙ СНАЙПЕР! +15 МОНЕТ!"; document.getElementById('sniper-buttons-box').innerHTML = ""; bigCelebration(15); return; }
+            let s = SNIPER_DATA[currentSniperIndex]; document.getElementById('sniper-desc-text').innerText = s.d; document.getElementById('sniper-feedback').innerText = "";
+            let box = document.getElementById('sniper-buttons-box'); box.innerHTML = "";
+            s.variants.forEach(v => { let b = document.createElement('button'); b.className = 'btn-variant'; b.innerText = v; b.onclick = (e) => { if(e) e.stopPropagation(); if(v === s.ok) { currentSniperIndex++; showSniperQuestion(); } else { document.getElementById('sniper-feedback').innerText = "❌ Ошибка, цель мимо!"; } }; box.appendChild(b); });
+        }
+
+        function startPvPGame() { hideAllScreens(); document.getElementById('pvp-game-screen').style.display = 'block'; document.getElementById('pvp-feedback').innerText = ""; document.getElementById('user-pvp-input').value = ""; document.getElementById('user-pvp-input').disabled = false; let n1 = Math.floor(Math.random() * 50) + 10; let n2 = Math.floor(Math.random() * 40) + 10; pvpCorrectAnswer = n1 + n2; document.getElementById('pvp-example-text').innerText = n1 + " + " + n2 + " = ?"; setTimeout(() => { if(document.getElementById('pvp-game-screen').style.display === 'block' && !document.getElementById('user-pvp-input').disabled) { document.getElementById('user-pvp-input').disabled = true; document.getElementById('pvp-feedback').innerText = "💥 Бот-хакер нанёс удар быстрее! Ты потерял 50🪙"; coins = Math.max(0, coins - 50); updateProfileDisplay(); } }, 6000); }
+        function checkPvPAnswer(e) { if(e) e.stopPropagation(); const input = document.getElementById('user-pvp-input'); if(input.disabled) return; if(parseInt(input.value) === pvpCorrectAnswer) { input.disabled = true; document.getElementById('pvp-feedback').innerText = "⚔️ ПОБЕДА! Ты сокрушил бота и забрал банк +50🪙!"; bigCelebration(50); } else { document.getElementById('pvp-feedback').innerText = "❌ Ошибка! Удар заблокирован ботом!"; } }
+
+        function openChestScreen() { hideAllScreens(); document.getElementById('chest-game-screen').style.display = 'block'; document.getElementById('chest-feedback').innerText = ""; document.getElementById('chest-anim-box').innerText = "📦"; document.getElementById('chest-open-btn').disabled = false; }
+        function openSecretChest(e) { if(e) e.stopPropagation(); if (coins < 40) { document.getElementById('chest-feedback').innerText = "❌ Не хватает 40 монет!"; return; } coins -= 40; document.getElementById('chest-open-btn').disabled = true; updateProfileDisplay(); let loot = ['💎', '🪙20', '🪙60', '💩', '⭐']; let box = document.getElementById('chest-anim-box'); let idx = 0; let intr = setInterval(() => { box.innerText = loot[idx]; idx = (idx + 1) % loot.length; }, 100); setTimeout(() => { clearInterval(intr); let prize = loot[Math.floor(Math.random() * loot.length)]; box.innerText = prize; if(prize === '💎') { document.getElementById('chest-feedback').innerText = "💎 УЛЬТРА-РЕДКИЙ БРИЛЛИАНТ! Добавлен в рюкзак!"; if(!boughtSkins.includes('💎')) boughtSkins.push('💎'); } else if(prize === '🪙20') { coins += 20; document.getElementById('chest-feedback').innerText = "🎉 Найдено +20 монет!"; } else if(prize === '🪙60') { coins += 60; document.getElementById('chest-feedback').innerText = "🎉 Найдено +60 монет!"; } else if(prize === '💩') { document.getElementById('chest-feedback').innerText = "💩 Какашка... Ну, зато эксклюзив! В рюкзаке!"; if(!boughtSkins.includes('💩')) boughtSkins.push('💩'); } else { document.getElementById('chest-feedback').innerText = "✨ Обычная звезда добавлена!"; } updateProfileDisplay(); }, 1500); }
+
+        function hideAllScreens() {
+            document.getElementById('main-menu').style.display = 'none'; document.getElementById('guess-game-screen').style.display = 'none';
+            document.getElementById('quiz-game-screen').style.display = 'none'; document.getElementById('cases-game-screen').style.display = 'none';
+            document.getElementById('time-game-screen').style.display = 'none'; document.getElementById('shop-screen').style.display = 'none';
+            document.getElementById('wheel-screen').style.display = 'none'; document.getElementById('inventory-screen').style.display = 'none';
+            document.getElementById('clicker-game-screen').style.display = 'none'; document.getElementById('sniper-game-screen').style.display = 'none';
+            document.getElementById('pvp-game-screen').style.display = 'none'; document.getElementById('chest-game-screen').style.display = 'none';
+            if(timeInterval) clearInterval(timeInterval);
+        }
+        function backToMenu() { hideAllScreens(); document.getElementById('main-menu').style.display = 'block'; }
+        document.addEventListener('keydown', function(event) { if (event.key === 'Enter') { if (document.getElementById('guess-game-screen').style.display === 'block') checkUserGuess(event); else if (document.getElementById('time-game-screen').style.display === 'block') checkTimeAnswer(event); else if (document.getElementById('pvp-game-screen').style.display === 'block') checkPvPAnswer(event); } });
+    </script>
+</body>
+</html>
