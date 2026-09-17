@@ -2,21 +2,17 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Игровая Империя Дани v8.0 (БИЗНЕС-ОБНОВЛЕНИЕ)</title>
-    <!-- 
-      📜 ШПИОНСКАЯ ШПАРГАЛКА ДЛЯ ДАНИ (Если забудешь команды):
-      1. Запуск бота в терминале Bash на PythonAnywhere: python3 bot.py
-      2. Быстрое сохранение в Блокноте на Acer: Ctrl + S
-      3. Выделить весь код дочиста: Ctrl + A -> Backspace
-      4. Поиск дедушки всех ботов в Telegram: @BotFather (команда /myapps)
-    -->
+    <title>🔥 Игровая Империя Дани v8.2 (ТОТАЛЬНЫЙ РЕДИЗАЙН) 🔥</title>
     <script src="https://telegram.org"></script>
     <style>
         body {
             background-color: #0b132b;
+            /* 🌈 Тот самый двадцатилетний штурм: плавный перелив тёмных цветов в космический оранжевый! */
             background-image: 
-                radial-gradient(circle at 20% 30%, rgba(28, 37, 65, 0.8) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(58, 80, 107, 0.6) 0%, transparent 45%);
+                radial-gradient(circle at 20% 30%, rgba(28, 37, 65, 0.8) 0%, transparent 60%),
+                radial-gradient(circle at 80% 70%, rgba(217, 119, 6, 0.25) 0%, transparent 60%),
+                radial-gradient(circle at 50% 50%, rgba(94, 96, 206, 0.3) 0%, transparent 70%);
+            animation: gradientBreathe 15s ease-in-out infinite alternate;
             color: #ffffff;
             text-align: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -25,86 +21,117 @@
             overflow-y: auto;
             min-height: 100vh;
             user-select: none;
+            position: relative;
         }
-        .profile-bar {
-            display: flex;
-            justify-content: space-around;
-            background: rgba(28, 37, 65, 0.8);
-            border-bottom: 2px solid #00b4d8;
-            padding: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #6fffe9;
-            box-shadow: 0 4px 15px rgba(0, 180, 216, 0.2);
-            position: sticky; top: 0; z-index: 100;
+
+        @keyframes gradientBreathe {
+            0% { background-color: #0b132b; }
+            50% { background-color: #1a120b; } /* Уход в глубокий тёмно-оранжевый оттенок */
+            100% { background-color: #0f0a1c; }
         }
-        h1 {
-            font-size: 24px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 15px #00b4d8;
-            margin-top: 15px; margin-bottom: 5px;
+
+        /* 🌌 ШПИОНСКИЙ ФОН С ПАСХАЛКАМИ */
+        .space-bg-decor {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; overflow: hidden;
+            opacity: 0.18;
         }
-        p { color: #6fffe9; font-size: 14px; }
+        .matrix-text {
+            position: absolute; font-size: 11px; font-weight: bold; color: #ff9e00; /* Подсветка оранжевым */
+            white-space: nowrap; animation: floatSpace 25s linear infinite;
+        }
+        @keyframes floatSpace {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-20vh) translateX(50px); opacity: 0; }
+        }
+
+        /* 👑 КРУТЫЕ МЕГА-КНОПКИ (Все приведены к единому гигантскому размеру флагманов!) */
         .btn-game {
-            display: block; width: 280px; margin: 10px auto;
-            padding: 12px 25px; font-size: 16px; font-weight: bold; color: #ffffff;
-            background: linear-gradient(135deg, #00b4d8 0%, #5e60ce 100%);
-            border: none; border-radius: 50px;
-            box-shadow: 0 5px 15px rgba(0, 180, 216, 0.4);
-            cursor: pointer; transition: all 0.2s ease; 
+            display: block; 
+            width: 300px; /* Тот самый жирный и мощный размер! */
+            margin: 14px auto;
+            padding: 15px 20px; /* Увеличенные отступы для массивности */
+            font-size: 15px; 
+            font-weight: bold; 
+            color: #ffffff;
+            background: linear-gradient(135deg, #241442 0%, #d97706 100%); /* Перелив от тёмного к оранжевому */
+            border: 2px solid #ff9e00; 
+            border-radius: 16px; /* Закругление как у продвинутых приложений */
+            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.3);
+            cursor: pointer; 
+            transition: all 0.25s ease;
+            position: relative; z-index: 1;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         .btn-game:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 20px #6fffe9;
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 10px 25px #ff9e00;
+            background: linear-gradient(135deg, #ff9e00 0%, #ff0055 100%);
         }
         .quest-box {
-            background: rgba(28, 37, 65, 0.5); border: 1px dashed #00b4d8;
-            border-radius: 15px; width: 290px; margin: 10px auto; padding: 10px;
-            text-align: left; font-size: 13px;
+            background: rgba(28, 37, 65, 0.6); border: 2px dashed #ff9e00;
+            border-radius: 15px; width: 290px; margin: 12px auto; padding: 12px;
+            text-align: left; font-size: 13px; position: relative; z-index: 1;
+            box-shadow: 0 0 15px rgba(217, 119, 6, 0.15);
         }
         .quest-item {
             display: flex; justify-content: space-between;
-            margin: 5px 0; padding-bottom: 5px; border-bottom: 1px solid rgba(111, 255, 233, 0.2);
+            margin: 6px 0; padding-bottom: 6px; border-bottom: 1px solid rgba(255, 158, 0, 0.2);
         }
         .grid-container {
             display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 320px; margin: 15px auto;
+            position: relative; z-index: 1;
         }
         .btn-variant {
-            padding: 12px; font-size: 15px; font-weight: bold; color: #ffffff;
-            background: #1c2541; border: 2px solid #3a506b; border-radius: 15px; cursor: pointer;
+            padding: 14px; font-size: 15px; font-weight: bold; color: #ffffff;
+            background: #151026; border: 2px solid #ff9e00; border-radius: 15px; cursor: pointer;
+            transition: all 0.2s ease;
         }
+        .btn-variant:hover { background: #ff9e00; color: #000000; box-shadow: 0 0 12px #ff9e00; }
         .input-number {
-            font-size: 22px; padding: 8px; width: 110px; text-align: center;
-            border: 2px solid #00b4d8; border-radius: 15px; background-color: #1c2541;
-            color: #6fffe9; outline: none; margin: 10px auto; display: block;
+            font-size: 24px; padding: 10px; width: 120px; text-align: center;
+            border: 2px solid #ff9e00; border-radius: 15px; background-color: #151026;
+            color: #ff9e00; outline: none; margin: 12px auto; display: block;
+            position: relative; z-index: 1; text-shadow: 0 0 5px #ff9e00;
         }
-        .game-screen { display: none; margin-top: 10px; padding: 15px; }
+        .game-screen { display: none; margin-top: 10px; padding: 15px; position: relative; z-index: 1; }
         .timer-container {
-            width: 280px; height: 15px; background: #1c2541; border: 2px solid #00b4d8; border-radius: 10px; margin: 10px auto; overflow: hidden;
+            width: 280px; height: 16px; background: #151026; border: 2px solid #ff9e00; border-radius: 10px; margin: 12px auto; overflow: hidden;
         }
-        .timer-bar { width: 100%; height: 100%; background: linear-gradient(90deg, #6fffe9, #00b4d8); }
-        .star { position: absolute; pointer-events: none; font-size: 24px; animation: fly 0.6s ease-out forwards; }
+        .timer-bar { width: 100%; height: 100%; background: linear-gradient(90deg, #ff9e00, #ff0055); }
+        .star { position: absolute; pointer-events: none; font-size: 26px; animation: fly 0.6s ease-out forwards; }
         @keyframes fly {
-            0% { transform: translate(0, 0) scale(1); opacity: 1; }
-            100% { transform: translate(var(--mx), var(--my)) scale(0.2); opacity: 0; }
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }
+            100% { transform: translate(var(--mx), var(--my)) scale(0.2) rotate(180deg); opacity: 0; }
         }
-        .wheel-btn { background: linear-gradient(135deg, #ff007f 0%, #7f00ff 100%) !important; }
+        .wheel-btn { background: linear-gradient(135deg, #ff0055 0%, #ff9e00 100%) !important; }
         .inv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 290px; margin: 15px auto; }
-        .inv-cell { background: #1c2541; border: 2px solid #3a506b; border-radius: 12px; padding: 10px; font-size: 24px; cursor: pointer; }
-        .inv-active { border-color: #6fffe9 !important; background: rgba(0, 180, 216, 0.3); }
-        .clicker-circle { width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle, #00b4d8, #5e60ce); box-shadow: 0 0 20px #6fffe9; margin: 20px auto; display: flex; align-items: center; justify-content: center; font-size: 36px; cursor: pointer; transition: transform 0.05s ease; }
-        .clicker-circle:active { transform: scale(0.95); }
-        
-        .help-input {
-            width: 260px; padding: 10px; font-size: 14px; background: #1c2541;
-            border: 2px solid #3a506b; border-radius: 10px; color: #ffffff;
-            margin: 8px auto; display: block; outline: none;
-        }
-        .help-input:focus { border-color: #ff0055; box-shadow: 0 0 10px rgba(255, 0, 85, 0.5); }
+        .inv-cell { background: #151026; border: 2px solid #3a506b; border-radius: 12px; padding: 12px; font-size: 26px; cursor: pointer; transition: all 0.2s; }
+        .inv-active { border-color: #ff9e00 !important; background: rgba(217, 119, 6, 0.25); box-shadow: 0 0 15px #ff9e00; }
+        .clicker-circle { width: 130px; height: 130px; border-radius: 50%; background: radial-gradient(circle, #ff9e00, #241442); border: 3px solid #ff9e00; box-shadow: 0 0 25px #ff9e00; margin: 20px auto; display: flex; align-items: center; justify-content: center; font-size: 42px; cursor: pointer; transition: transform 0.05s ease; }
+        .clicker-circle:active { transform: scale(0.93); }
+        .help-input { width: 260px; padding: 11px; font-size: 14px; background: #151026; border: 2px solid #3a506b; border-radius: 10px; color: #ffffff; margin: 8px auto; display: block; outline: none; }
+        .help-input:focus { border-color: #ff0055; box-shadow: 0 0 12px rgba(255, 0, 85, 0.6); }
+        .profile-bar { display: flex; justify-content: space-around; background: rgba(21, 16, 38, 0.9); border-bottom: 3px solid #ff9e00; padding: 12px; font-size: 16px; font-weight: bold; color: #ff9e00; box-shadow: 0 4px 20px rgba(217, 119, 6, 0.25); position: sticky; top: 0; z-index: 100; }
     </style>
 </head>
 <body onclick="spawnStars(event)">
+
+    <!-- 🌌 ПЕРЕЛИВАЮЩИЕСЯ ШПИОНСКИЕ НАДПИСИ НА ТЁМНО-ОРАНЖЕВОМ ФОНЕ -->
+    <div class="space-bg-decor">
+        <div class="matrix-text" style="top: 8%; left: 6%; animation-delay: 0s;">🔥 Ура, математика! 🧠 💥</div>
+        <div class="matrix-text" style="top: 28%; left: 55%; animation-delay: 4s;">🕵️‍♂️ Хотите поиграть в шпионов? 🔎</div>
+        <div class="matrix-text" style="top: 48%; left: 12%; animation-delay: 8s;">✨ Игровая Империя v8.2 🌌</div>
+        <div class="matrix-text" style="top: 68%; left: 65%; animation-delay: 2s;">🖥️ Пассивный доход капает... 🪙</div>
+        <div class="matrix-text" style="top: 18%; left: 38%; animation-delay: 12s;">👑 Бог ДжаваСкрипта 👑</div>
+        <div class="matrix-text" style="top: 82%; left: 22%; animation-delay: 6s;">🚀 Крути педали, пока не дали! 🚴‍♂️</div>
+        <div class="matrix-text" style="top: 38%; left: 75%; animation-delay: 15s;">📦 Тайные сундуки ждут! 💎</div>
+        <div class="matrix-text" style="top: 58%; left: 32%; animation-delay: 10s;">⏱️ Спидран: На время! ⚡</div>
+    </div>
 
     <div class="profile-bar">
         <div>🪙 Золото: <span id="coins-display">0</span></div>
@@ -112,8 +139,8 @@
         <div>🏆 Ранг: <span id="rank-display">🟢 Нубик</span></div>
     </div>
     <div id="main-menu">
-        <h1>🎉 ИГРОВАЯ ИМПЕРИЯ v8.0 🎉</h1>
-        <p>⚔️ Сезон Пассивного Дохода, Дуэлей и Помощи открыт! ⚔️</p>
+        <h1 style="text-shadow: 0 0 20px #ff9e00, 0 0 30px #ff0055;">🔥 ИГРОВАЯ ИМПЕРИЯ v8.2 🔥</h1>
+        <p style="color: #ff9e00; font-weight: bold;">🕵️‍♂️ Тотальный Оранжевый Редизайн & Пассивный Майнинг 🕵️‍♂️</p>
 
         <div class="quest-box">
             <b style="color: #ffea00; font-size: 14px;">🎯 Ежедневные Квесты:</b>
@@ -122,39 +149,39 @@
             <div class="quest-item"><span>⚡ Спидран на время (0/1)</span><b id="q-time-status" style="color:#ff0055;">+50🪙</b></div>
         </div>
 
-        <div style="margin-top: 15px;">
+        <div style="margin-top: 20px;">
+            <!-- 🔥 Каждая кнопка приведена к гигантскому размеру! -->
             <button class="btn-game wheel-btn" id="main-wheel-btn" onclick="openWheel()">🎡 Колесо Удачи (1 спин)</button>
-            <button class="btn-game" style="background: linear-gradient(135deg, #e63946 0%, #1d3557 100%);" onclick="startPvPGame()">⚔️ PvP Дуэль с ботом-хакером</button>
+            <button class="btn-game" style="background: linear-gradient(135deg, #e63946 0%, #241442 100%);" onclick="startPvPGame()">⚔️ PvP Дуэль с ботом-хакером</button>
             
             <button class="btn-game" onclick="startGuessGame()">🎲 Угадай число</button>
             <button class="btn-game" onclick="startQuizGame()">💡 Викторина-Квиз</button>
             <button class="btn-game" onclick="startCasesGame()">📝 Охота за падежами</button>
             <button class="btn-game" style="background: linear-gradient(135deg, #ff0055 0%, #ffaa00 100%);" onclick="startTimeGame()">⚡ Спидран: На время!</button>
             
-            <button class="btn-game" style="background: linear-gradient(135deg, #2a9d8f 0%, #264653 100%);" onclick="startClickerGame()">🕹️ Игра №1: Хакерский Кликер</button>
-            <button class="btn-game" style="background: linear-gradient(135deg, #a8dadc 0%, #457b9d 100%);" onclick="startSniperGame()">🎯 Игра №2: Словесный Снайпер</button>
+            <button class="btn-game" style="background: linear-gradient(135deg, #2a9d8f 0%, #151026 100%);" onclick="startClickerGame()">🕹️ Игра №1: Хакерский Кликер</button>
+            <button class="btn-game" style="background: linear-gradient(135deg, #457b9d 0%, #151026 100%);" onclick="startSniperGame()">🎯 Игра №2: Словесный Снайпер</button>
             
-            <!-- ⚡ Новая кнопка пассивного бизнеса v8.0! -->
-            <button class="btn-game" style="background: linear-gradient(135deg, #00f5d4 0%, #011627 100%);" onclick="openBusinessScreen()">🏢 Бизнес-Центр (Пассивный доход)</button>
+            <button class="btn-game" style="background: linear-gradient(135deg, #d97706 0%, #151026 100%); border-color: #ffaa00;" onclick="openBusinessScreen()">🏢 Бизнес-Центр (Пассивный доход)</button>
             
             <button class="btn-game" style="background: linear-gradient(135deg, #ffb703 0%, #fb8500 100%);" onclick="openShop()">🏪 Магазин скинов</button>
             <button class="btn-game" style="background: linear-gradient(135deg, #ff70a6 0%, #ff9770 100%);" onclick="openChestScreen()">📦 Тайный Сундук (40🪙)</button>
             <button class="btn-game" style="background: linear-gradient(135deg, #4ea8de 0%, #56cfe1 100%);" onclick="openInventory()">🎒 Мой Рюкзак (Инвентарь)</button>
         </div>
     </div>
-    <div id="guess-game-screen" class="game-screen">
+     <div id="guess-game-screen" class="game-screen">
         <h2>🎲 Игра: Угадай Число</h2>
         <p>Я загадал число от 1 до 100. У тебя 7 попыток!</p>
         <p style="font-size: 20px; font-weight: bold; color: #ffea00;" id="attempts-text">Осталось попыток: 7/7</p>
         <input type="number" id="user-guess-input" class="input-number" min="1" max="100" placeholder="0">
-        <p id="guess-feedback" style="font-size: 22px; font-weight: bold; color: #6fffe9; min-height: 30px;"></p>
+        <p id="guess-feedback" style="font-size: 22px; font-weight: bold; color: #ff9e00; min-height: 30px;"></p>
         <button class="btn-game" onclick="checkUserGuess(event)">🔥 Проверить!</button>
         <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
     </div>
 
     <div id="quiz-game-screen" class="game-screen">
         <h2>💡 Викторина-Квиз</h2>
-        <p style="font-size: 22px; font-weight: bold; color: #6fffe9; margin-bottom: 20px;" id="quiz-question-text">Вопрос</p>
+        <p style="font-size: 22px; font-weight: bold; color: #ff9e00; margin-bottom: 20px;" id="quiz-question-text">Вопрос</p>
         <div class="grid-container">
             <button class="btn-variant" onclick="checkQuizAnswer('А', event)" id="quiz-btn-A">А</button>
             <button class="btn-variant" onclick="checkQuizAnswer('Б', event)" id="quiz-btn-Б">Б</button>
@@ -180,7 +207,7 @@
         <p id="cases-feedback" style="font-size: 20px; font-weight: bold; min-height: 30px;"></p>
         <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
     </div>
-    <div id="time-game-screen" class="game-screen">
+     <div id="time-game-screen" class="game-screen">
         <h2>⚡ Математика на время!</h2>
         <p style="font-size: 18px;">Реши 10 примеров подряд, пока тикает таймер!</p>
         <p style="font-size: 22px; font-weight: bold; color: #ffea00;" id="time-score-text">Решено примеров: 0/10</p>
@@ -192,20 +219,20 @@
         <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
     </div>
 
-    <!-- 🏢 СОВЕРШЕННО НОВЫЙ ЗАЛ: БИЗНЕС-ЦЕНТР v8.0 (Пассивный доход по чек-листу!) -->
+    <!-- 🏢 СОВЕРШЕННО НОВЫЙ ЗАЛ: БИЗНЕС-ЦЕНТР v8.2 (Пассивный доход!) -->
     <div id="business-screen" class="game-screen">
         <h2>🏢 Бизнес-Центр Пассивного Дохода</h2>
         <p>Покупай хакерские предприятия, чтобы золото капало каждую секунду!</p>
         <div style="margin-top: 20px;">
-            <div style="background: rgba(0, 245, 212, 0.1); padding: 10px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #00f5d4;">
-                <h4 style="margin: 5px 0; color: #00f5d4;">📱 Клик-Ферма (+1🪙/сек)</h4>
+            <div style="background: rgba(217, 119, 6, 0.1); padding: 10px; border-radius: 15px; margin-bottom: 10px; border: 2px solid #ff9e00;">
+                <h4 style="margin: 5px 0; color: #ff9e00;">📱 Клик-Ферма (+1🪙/сек)</h4>
                 <p style="margin: 5px 0;" id="biz1-count-text">Куплено: 0</p>
-                <button class="btn-game" style="width: 220px; font-size: 14px; padding: 8px;" id="biz1-btn" onclick="buyBusiness(1, 40, event)">Купить за 40🪙</button>
+                <button class="btn-game" style="width: 240px; font-size: 14px; padding: 10px;" id="biz1-btn" onclick="buyBusiness(1, 40, event)">Купить за 40🪙</button>
             </div>
-            <div style="background: rgba(94, 96, 206, 0.1); padding: 10px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #5e60ce;">
-                <h4 style="margin: 5px 0; color: #5e60ce;">🖥️ Майнинг-Шахта (+5🪙/сек)</h4>
+            <div style="background: rgba(255, 0, 85, 0.1); padding: 10px; border-radius: 15px; margin-bottom: 10px; border: 2px solid #ff0055;">
+                <h4 style="margin: 5px 0; color: #ff0055;">🖥️ Майнинг-Шахта (+5🪙/сек)</h4>
                 <p style="margin: 5px 0;" id="biz2-count-text">Куплено: 0</p>
-                <button class="btn-game" style="width: 220px; font-size: 14px; padding: 8px;" id="biz2-btn" onclick="buyBusiness(2, 150, event)">Купить за 150🪙</button>
+                <button class="btn-game" style="width: 240px; font-size: 14px; padding: 10px;" id="biz2-btn" onclick="buyBusiness(2, 150, event)">Купить за 150🪙</button>
             </div>
         </div>
         <p id="business-feedback" style="font-size: 18px; font-weight: bold; color: #ffea00; min-height: 30px;"></p>
@@ -215,11 +242,11 @@
         <h2>🏪 Магазин Эффектов Клика</h2>
         <p>Покупай крутые скины за золото!</p>
         <div style="margin-top: 20px;">
-            <button class="btn-game" style="background: #3a506b;" onclick="buySkin('⭐', 0, event)">⭐ Обычные Звёзды (Бесплатно)</button>
-            <button class="btn-game" style="background: #ffaa00;" onclick="buySkin('🔥', 50, event)">🔥 Огненный Салют (50 монет)</button>
-            <button class="btn-game" style="background: #ff0055;" onclick="buySkin('🐈', 100, event)">🐈 Пушистый Кошак (100 монет)</button>
-            <button class="btn-game" style="background: #ffea00; color: #000000;" onclick="buySkin('💎', 150, event)">💎 Бриллиант (150 монет)</button>
-            <button class="btn-game" style="background: #6a4c41;" onclick="buySkin('💩', 30, event)">💩 Какашка (30 монет)</button>
+            <button class="btn-game" style="background: #151026; border-color: #3a506b;" onclick="buySkin('⭐', 0, event)">⭐ Обычные Звёзды (Бесплатно)</button>
+            <button class="btn-game" style="background: linear-gradient(135deg, #ffaa00 0%, #151026 100%); border-color: #ffaa00;" onclick="buySkin('🔥', 50, event)">🔥 Огненный Салют (50 монет)</button>
+            <button class="btn-game" style="background: linear-gradient(135deg, #ff0055 0%, #151026 100%); border-color: #ff0055;" onclick="buySkin('🐈', 100, event)">🐈 Пушистый Кошак (100 монет)</button>
+            <button class="btn-game" style="background: linear-gradient(135deg, #ffea00 0%, #151026 100%); border-color: #ffea00; color: #ffffff;" onclick="buySkin('💎', 150, event)">💎 Бриллиант (150 монет)</button>
+            <button class="btn-game" style="background: linear-gradient(135deg, #6a4c41 0%, #151026 100%); border-color: #6a4c41;" onclick="buySkin('💩', 30, event)">💩 Какашка (30 монет)</button>
         </div>
         <p id="shop-feedback" style="font-size: 20px; font-weight: bold; color: #ffea00; min-height: 30px;"></p>
         <button class="btn-game" style="background: #ff0055; margin-top: 30px;" onclick="backToMenu()">↩️ Назад в меню</button>
@@ -238,14 +265,14 @@
         <h2>🎒 Твой Личный Рюкзак</h2>
         <p>Выбирай и экипируй свои скины здесь!</p>
         <div class="inv-grid" id="inventory-cells-box"></div>
-        <p id="inv-feedback" style="font-size: 20px; font-weight: bold; color: #6fffe9; min-height: 30px;"></p>
+        <p id="inv-feedback" style="font-size: 20px; font-weight: bold; color: #ff9e00; min-height: 30px;"></p>
         <button class="btn-game" style="background: #ff0055; margin-top: 30px;" onclick="backToMenu()">↩️ Назад в меню</button>
     </div>
     <div id="clicker-game-screen" class="game-screen">
         <h2>🕹️ Хакерский Кликер</h2>
         <p>Тапай по серверу, чтобы получать монеты!</p>
         <div class="clicker-circle" onclick="tapServer(event)">🖥️</div>
-        <p style="font-size: 20px; font-weight: bold; color: #6fffe9;" id="clicker-score-text">Добыто за сессию: 0🪙</p>
+        <p style="font-size: 20px; font-weight: bold; color: #ff9e00;" id="clicker-score-text">Добыто за сессию: 0🪙</p>
         <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Сдать золото и выйти</button>
     </div>
 
@@ -277,7 +304,7 @@
         <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
     </div>
     <script>
-        // 🔊 БРОНЕБОЙНЫЙ СИНТЕЗАТОР ЗВУКОВ БЕЗ ПРЕДУПРЕЖДЕНИЙ
+        // 🔊 БРОНЕБОЙНЫЙ СИНТЕЗАТОР ЗВУКОВ БЕЗ ПРЕДУПРЕЖДЕНИЙ И ТРЕУГОЛЬНИКОВ
         function playSound(type) {
             try {
                 let ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -316,7 +343,7 @@
 
         const QUIZ_DATA = [
             {"q": "Какой язык программирования назван в честь змеи? 🐍", "a": "А) JavaScript", "b": "Б) Python", "c": "В) С++", "d": "Г) Скретч", "ok": "Б"},
-            {"q": "Что программисты называют 'деплоем'? ☁️", "a": "А) Перенос на сервер", "b": "Б) Поход за чипсами", "c": "В) Ошибку в коде", "d": "Г) Скон", "ok": "А"},
+            {"q": "Что программисты называют 'деплоем'? ☁️", "a": "А) Перенос на server", "b": "Б) Поход за чипсами", "c": "В) Ошибку в коде", "d": "Г) Сон", "ok": "А"},
             {"q": "Лимит знаков в одном сообщении Telegram? 📜", "a": "А) 100", "b": "Б) 1000", "c": "В) 4096", "d": "Г) Нет лимита", "ok": "В"}
         ];
 
@@ -344,10 +371,10 @@
         let activeSkin = localStorage.getItem('danya_skin') || '⭐';
         let boughtSkins = JSON.parse(localStorage.getItem('danya_bought')) || ['⭐'];
         
-        // 🏢 ПЕРЕМЕННЫЕ ДЛЯ НАШЕГО БИЗНЕСА v8.0
-        let biz1 = parseInt(localStorage.getItem('danya_biz1')) || 0; // Клик-Фермы
-        let biz2 = parseInt(localStorage.getItem('danya_biz2')) || 0; // Майнинг-Шахты
-        let passiveIncome = 0; // Сколько капает в секунду
+        // 🏢 ПЕРЕМЕННЫЕ ПАССИВНОГО БИЗНЕСА v8.2
+        let biz1 = parseInt(localStorage.getItem('danya_biz1')) || 0;
+        let biz2 = parseInt(localStorage.getItem('danya_biz2')) || 0;
+        let passiveIncome = 0;
 
         let qGuessDone = localStorage.getItem('dq_guess') === 'true';
         let qQuizDone = localStorage.getItem('dq_quiz') === 'true';
@@ -361,7 +388,7 @@
         let clickerSessionCoins = 0;
         updateProfileDisplay();
         renderQuests();
-        startPassiveIncomeLoop(); // ⚡ Запуск вечного начисления золота!
+        startPassiveIncomeLoop(); // ⚡ Запуск автоматического начисления монет!
 
         function updateProfileDisplay() {
             passiveIncome = (biz1 * 1) + (biz2 * 5);
@@ -385,7 +412,7 @@
             localStorage.setItem('danya_biz2', biz2);
         }
 
-        // 📈 ФУНКЦИЯ ВЕЧНОГО ТАЙМЕРА (Начисляет золото каждую секунду)
+        // 📈 ВЕЧНЫЙ ТАЙМЕР ПАССИВНОГО ДОХОДА (Тикает каждую секунду)
         function startPassiveIncomeLoop() {
             setInterval(() => {
                 let income = (biz1 * 1) + (biz2 * 5);
@@ -404,7 +431,7 @@
                 coins -= cost;
                 if (id === 1) { biz1++; }
                 else if (id === 2) { biz2++; }
-                fb.style.color = "#00f5d4";
+                fb.style.color = "#ff9e00";
                 fb.innerText = "🎉 Предприятие успешно куплено и запущено!";
                 updateProfileDisplay();
                 openBusinessScreen();
@@ -577,25 +604,11 @@
             }
         }
 
-        function checkTimeAnswer(e) {
-            if (e) { e.stopPropagation(); }
-            if (isTimeGameOver) { return; }
-            if (parseInt(document.getElementById('user-time-input').value) === timeCorrectAnswer) {
-                timeScore++;
-                document.getElementById('time-score-text').innerText = "Решено: " + timeScore + "/10";
-                timeLeft = Math.min(100, timeLeft + 15);
-                generateTimeExample();
-            } else {
-                document.getElementById('time-feedback').innerText = "❌ Ошибка!";
-            }
-        }
-
         function openShop() {
             hideAllScreens();
             document.getElementById('shop-screen').style.display = 'block';
             document.getElementById('shop-feedback').innerText = "";
         }
-
         function buySkin(skinSymbol, cost, e) {
             if (e) { e.stopPropagation(); }
             if (boughtSkins.includes(skinSymbol)) {
@@ -611,6 +624,7 @@
                 document.getElementById('shop-feedback').innerText = "❌ Не хватает золота!";
             }
         }
+
         function openWheel() {
             hideAllScreens();
             document.getElementById('wheel-screen').style.display = 'block';
@@ -696,13 +710,13 @@
             document.getElementById('clicker-score-text').innerText = "Добыто за сессию: " + clickerSessionCoins + "🪙";
             updateProfileDisplay();
         }
-
         function startSniperGame() {
             hideAllScreens();
             document.getElementById('sniper-game-screen').style.display = 'block';
             currentSniperIndex = 0;
             showSniperQuestion();
         }
+
         function showSniperQuestion() {
             if (currentSniperIndex >= SNIPER_DATA.length) {
                 document.getElementById('sniper-desc-text').innerText = "🏆 ТЫ ИСТИННЫЙ СНАЙПЕР! +15 МОНЕТ!";
@@ -858,18 +872,18 @@
                 tg.sendData(report);
                 tg.close();
             } else {
-                alert('🚀 [Режим ПК] Сообщение отправлено бы Дане в бота!');
+                alert('🚀 [Режим ПК] Сообщение отправлено  Дане в бота!');
                 backToMenu();
             }
         }
     </script>
 
-    <div style="margin: 40px auto 20px auto; padding: 20px; width: 280px; background: rgba(28, 37, 65, 0.7); border: 2px solid #3a506b; border-radius: 15px; text-align: center;">
-        <h3 style="color: #6fffe9; margin-top: 0; font-size: 16px;">🆘 Служба Помощи (Баг-Трекер)</h3>
+    <div style="margin: 40px auto 20px auto; padding: 20px; width: 280px; background: rgba(28, 37, 65, 0.7); border: 2px solid #ff9e00; border-radius: 15px; text-align: center;">
+        <h3 style="color: #ff9e00; margin-top: 0; font-size: 16px;">🆘 Служба Помощи (Баг-Трекер)</h3>
         <p style="font-size: 12px; color: #adb5bd; margin-bottom: 10px;">Нашёл баг? Напиши Даниилу прямо отсюда!</p>
         <input type="text" id="bug-name" class="help-input" placeholder="Твоё имя или ник">
         <input type="text" id="bug-text" class="help-input" placeholder="Что сломалось или какой баг?">
-        <button class="btn-game" style="width: 100%; margin-top: 10px; font-size: 14px; background: linear-gradient(135deg, #ff0055 0%, #9e0059 100%);" onclick="sendBugReport()">✉️ Отправить баг Дане!</button>
+        <button class="btn-game" style="width: 100%; margin-top: 10px; font-size: 14px; background: linear-gradient(135deg, #ff0055 0%, #d97706 100%);" onclick="sendBugReport()">✉️ Отправить баг Дане!</button>
     </div>
 
 </body>
