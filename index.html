@@ -2,7 +2,9 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Игровая Империя Дани v6.1</title>
+    <title>Игровая Империя Дани v7.0</title>
+    <!-- Главный шпионский скрипт Телеграма для передачи баг-репортов в бота -->
+    <script src="https://telegram.org"></script>
     <style>
         body {
             background-color: #0b132b;
@@ -87,6 +89,14 @@
         .inv-active { border-color: #6fffe9 !important; background: rgba(0, 180, 216, 0.3); }
         .clicker-circle { width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle, #00b4d8, #5e60ce); box-shadow: 0 0 20px #6fffe9; margin: 20px auto; display: flex; align-items: center; justify-content: center; font-size: 36px; cursor: pointer; transition: transform 0.05s ease; }
         .clicker-circle:active { transform: scale(0.95); }
+        
+        /* 🛠️ Стили для текстовых полей формы Помощи ( Bug Report ) */
+        .help-input {
+            width: 260px; padding: 10px; font-size: 14px; background: #1c2541;
+            border: 2px solid #3a506b; border-radius: 10px; color: #ffffff;
+            margin: 8px auto; display: block; outline: none;
+        }
+        .help-input:focus { border-color: #ff0055; box-shadow: 0 0 10px rgba(255, 0, 85, 0.5); }
     </style>
 </head>
 <body onclick="spawnStars(event)">
@@ -96,9 +106,10 @@
         <div>🏆 Ранг: <span id="rank-display">🟢 Нубик</span></div>
     </div>
     <div id="main-menu">
-        <h1>🎉 ИГРОВАЯ ИМПЕРИЯ v6.1 🎉</h1>
-        <p>⚔️ Сезон Дуэлей, Сундуков и Хакерских Игр открыт! ⚔️</p>
+        <h1>🎉 ИГРОВАЯ ИМПЕРИЯ v7.0 🎉</h1>
+        <p>⚔️ Сезон Дуэлей, Сундуков и Новых Скинов открыт! ⚔️</p>
 
+        <!-- 🎯 Блок ежедневных квестов -->
         <div class="quest-box">
             <b style="color: #ffea00; font-size: 14px;">🎯 Ежедневные Квесты:</b>
             <div class="quest-item"><span>🎲 Разгадать число (0/1)</span><b id="q-guess-status" style="color:#ff0055;">+20🪙</b></div>
@@ -123,7 +134,6 @@
             <button class="btn-game" style="background: linear-gradient(135deg, #4ea8de 0%, #56cfe1 100%);" onclick="openInventory()">🎒 Мой Рюкзак (Инвентарь)</button>
         </div>
     </div>
-
     <div id="guess-game-screen" class="game-screen">
         <h2>🎲 Игра: Угадай Число</h2>
         <p>Я загадал число от 1 до 100. У тебя 7 попыток!</p>
@@ -146,7 +156,6 @@
         <p id="quiz-feedback" style="font-size: 20px; font-weight: bold; min-height: 30px;"></p>
         <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
     </div>
-
     <div id="cases-game-screen" class="game-screen">
         <h2>📝 Охота за падежами</h2>
         <p style="font-size: 18px;">Определи падеж весёлой фразы:</p>
@@ -174,7 +183,6 @@
         <button class="btn-game" onclick="checkTimeAnswer(event)">🔥 Проверить!</button>
         <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
     </div>
-
     <div id="shop-screen" class="game-screen">
         <h2>🏪 Магазин Эффектов Клика</h2>
         <p>Покупай крутые скины за золото!</p>
@@ -204,6 +212,7 @@
         <button class="btn-game" style="background: #ff0055; margin-top: 30px;" onclick="backToMenu()">↩️ Назад в меню</button>
     </div>
 
+    <!-- 🕹️ ТУТ НАЧИНАЕТСЯ КУСОК №8: НОВЫЕ ХАКЕРСКИЕ РЕЖИМЫ И СУНДУКИ -->
     <div id="clicker-game-screen" class="game-screen">
         <h2>🕹️ Хакерский Кликер</h2>
         <p>Тапай по серверу, чтобы получать монеты!</p>
@@ -233,13 +242,14 @@
 
     <div id="chest-game-screen" class="game-screen">
         <h2>📦 Тайный Сундук</h2>
-        <p>Стоимость: 40🪙. Выбей Бриллиант!</p>
+        <p>Стоимость: 40🪙. Выбей редкий лут!</p>
         <div style="font-size: 90px; margin: 20px;" id="chest-anim-box">📦</div>
         <button class="btn-game" style="background: #ff70a6;" id="chest-open-btn" onclick="openSecretChest(event)">🔓 Открыть сундук!</button>
         <p id="chest-feedback" style="font-size: 22px; font-weight: bold; color: #ffea00; min-height: 30px;"></p>
         <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
     </div>
     <script>
+        // 🔊 БРОНЕБОЙНЫЙ СИНТЕЗАТОР ЗВУКОВ (Работает прямо в процессоре)
         function playSound(type) {
             try {
                 let ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -277,10 +287,16 @@
             {"p": "Думаю о (ком? чём?) крутом Mini App 🚀", "ok": "П.п.", "h": "Предложный (о ком? о чём?)"}
         ];
 
+        // 🎯 РАСШИРЕННАЯ БАЗА СНAЙПЕРА НА 8 ВОПРОСОВ (По чек-листу!)
         const SNIPER_DATA = [
             {"d": "Секретная папка с кодом проекта на сервере:", "variants": ["Репозиторий", "Блокнот", "Скрепка"], "ok": "Репозиторий"},
             {"d": "Ошибка или опечатка в коде, которая всё ломает:", "variants": ["Баг", "Деплой", "Скриншот"], "ok": "Баг"},
-            {"d": "Процесс загрузки готового сайта в интернет:", "variants": ["Деплой", "Кадрирование", "Спидран"], "ok": "Деплой"}
+            {"d": "Процесс загрузки готового сайта в интернет:", "variants": ["Деплой", "Кадрирование", "Спидран"], "ok": "Деплой"},
+            {"d": "Автозамена текста на смартфонах, которая часто мешает:", "variants": ["Т9", "Блокнот", "Гитхаб"], "ok": "Т9"},
+            {"d": "Главарь и создатель всех ботов в Telegram:", "variants": ["BotFather", "Дуров", "Блокнот"], "ok": "BotFather"},
+            {"d": "Верный рабочий ноутбук Дани:", "variants": ["Acer", "Asus", "MacBook"], "ok": "Acer"},
+            {"d": "Стандартная программа Windows, где Даня правит код:", "variants": ["Блокнот", "Ворд", "Калькулятор"], "ok": "Блокнот"},
+            {"d": "Язык, оживляющий Колесо Удачи и звуки:", "variants": ["JavaScript", "Python", "HTML"], "ok": "JavaScript"}
         ];
 
         let coins = parseInt(localStorage.getItem('danya_coins')) || 0;
@@ -304,17 +320,23 @@
 
         function updateProfileDisplay() {
             document.getElementById('coins-display').innerText = coins;
+            
+            // 🏆 КОСМИЧЕСКАЯ СИСТЕМА РАНГОВ v7.0 (По чек-листу!)
             let r = "🟢 Нубик";
             if(totalWins >= 5) r = "🤖 Ученик Дани";
             if(totalWins >= 15) r = "🖥️ Хакер Acer";
             if(totalWins >= 30) r = "👑 Император Даня";
+            if(totalWins >= 50) r = "👑 Бог ДжаваСкрипта";
+            if(totalWins >= 100) r = "🌌 Повелитель Серверов";
             document.getElementById('rank-display').innerText = r;
+            
             localStorage.setItem('danya_coins', coins);
             localStorage.setItem('danya_wins', totalWins);
             localStorage.setItem('danya_skin', activeSkin);
             localStorage.setItem('danya_bought', JSON.stringify(boughtSkins));
             localStorage.setItem('danya_last_wheel', lastWheelDate);
         }
+
         function renderQuests() {
             document.getElementById('q-guess-status').innerText = qGuessDone ? "✅ Выполнен" : "+20🪙";
             document.getElementById('q-guess-status').style.color = qGuessDone ? "#6fffe9" : "#ff0055";
@@ -350,7 +372,6 @@
                 }, i * 60);
             }
         }
-
         function startGuessGame() {
             hideAllScreens(); document.getElementById('guess-game-screen').style.display = 'block';
             secretNum = Math.floor(Math.random() * 100) + 1; lives = 7; isGameOver = false;
@@ -392,6 +413,7 @@
             if (letter === QUIZ_DATA[currentQuizIndex].ok) { currentQuizIndex++; showQuizQuestion(); }
             else { document.getElementById('quiz-feedback').innerText = "❌ Неверно!"; }
         }
+
         function startCasesGame() { hideAllScreens(); document.getElementById('cases-game-screen').style.display = 'block'; currentCaseIndex = 0; showCaseQuestion(); }
         function showCaseQuestion() {
             if(currentCaseIndex >= CASE_DATA.length) {
@@ -452,7 +474,7 @@
         function spinTheWheel(e) {
             if(e) e.stopPropagation(); document.getElementById('spin-action-btn').disabled = true;
             lastWheelDate = new Date().toDateString();
-            let items = ['🪙10', '🪙30', '🪙100', '🔥', '🐈', '💩'];
+            let items = ['🪙10', '🪙30', '🪙100', '🔥', '🐈', '💩', '💎'];
             let box = document.getElementById('wheel-anim-box'); let idx = 0;
             let intr = setInterval(() => { box.innerText = items[idx]; idx = (idx + 1) % items.length; }, 100);
             setTimeout(() => {
@@ -460,7 +482,8 @@
                 if (finalPrize === '🪙10') { coins += 10; document.getElementById('wheel-feedback').innerText = "🎉 +10 монет!"; }
                 else if (finalPrize === '🪙30') { coins += 30; document.getElementById('wheel-feedback').innerText = "🎉 +30 монет!"; }
                 else if (finalPrize === '🪙100') { coins += 100; document.getElementById('wheel-feedback').innerText = "🔥 МЕГА-ДЖЕКПОТ! +100 МОНЕТ!"; }
-                else if (finalPrize === '💩') { document.getElementById('wheel-feedback').innerText = "💩 Скин добавлен в рюкзак!"; if(!boughtSkins.includes('💩')) boughtSkins.push('💩'); }
+                else if (finalPrize === '💩') { document.getElementById('wheel-feedback').innerText = "💩 Скин Какашка добавлен в рюкзак!"; if(!boughtSkins.includes('💩')) boughtSkins.push('💩'); }
+                else if (finalPrize === '💎') { document.getElementById('wheel-feedback').innerText = "💎 УЛЬТРА-РЕДКИЙ БРИЛЛИАНТ! В рюкзаке!"; if(!boughtSkins.includes('💎')) boughtSkins.push('💎'); }
                 else { document.getElementById('wheel-feedback').innerText = "✨ Выпал редкий скин: " + finalPrize; if(!boughtSkins.includes(finalPrize)) boughtSkins.push(finalPrize); }
                 bigCelebration(0);
             }, 2000);
@@ -480,6 +503,7 @@
         function tapServer(e) { if(e) e.stopPropagation(); clickerSessionCoins++; coins++; document.getElementById('clicker-score-text').innerText = "Добыто за сессию: " + clickerSessionCoins + "🪙"; updateProfileDisplay(); }
 
         function startSniperGame() { hideAllScreens(); document.getElementById('sniper-game-screen').style.display = 'block'; currentSniperIndex = 0; showSniperQuestion(); }
+
         function showSniperQuestion() {
             if(currentSniperIndex >= SNIPER_DATA.length) { document.getElementById('sniper-desc-text').innerText = "🏆 ТЫ ИСТИННЫЙ СНАЙПЕР! +15 МОНЕТ!"; document.getElementById('sniper-buttons-box').innerHTML = ""; bigCelebration(15); return; }
             let s = SNIPER_DATA[currentSniperIndex]; document.getElementById('sniper-desc-text').innerText = s.d; document.getElementById('sniper-feedback').innerText = "";
@@ -504,6 +528,32 @@
         }
         function backToMenu() { hideAllScreens(); document.getElementById('main-menu').style.display = 'block'; }
         document.addEventListener('keydown', function(event) { if (event.key === 'Enter') { if (document.getElementById('guess-game-screen').style.display === 'block') checkUserGuess(event); else if (document.getElementById('time-game-screen').style.display === 'block') checkTimeAnswer(event); else if (document.getElementById('pvp-game-screen').style.display === 'block') checkPvPAnswer(event); } });
+        
+        // 🆘 ШПИОНСКАЯ СЛУЖБА ПОМОЩИ (Баг-Репорт)
+        const tg = window.Telegram ? window.Telegram.WebApp : null;
+        if (tg) { tg.ready(); tg.expand(); }
+
+        function sendBugReport() {
+            const name = document.getElementById('bug-name').value.trim();
+            const text = document.getElementById('bug-text').value.trim();
+            if (!name || !text) { alert('⚠️ Заполни оба поля формы Помощи!'); return; }
+            if (tg) {
+                const report = `🚨 БАГ-РЕПОРТ v7.0 🚨\n👤 От: ${name}\n📝 Проблема: ${text}`;
+                tg.sendData(report); tg.close();
+            } else {
+                alert('🚀 [Режим ПК] Сообщение отправлено бы Дане в бота!');
+                backToMenu();
+            }
+        }
     </script>
+
+    <div style="margin: 40px auto 20px auto; padding: 20px; width: 280px; background: rgba(28, 37, 65, 0.7); border: 2px solid #3a506b; border-radius: 15px; text-align: center;">
+        <h3 style="color: #6fffe9; margin-top: 0; font-size: 16px;">🆘 Служба Помощи (Баг-Трекер)</h3>
+        <p style="font-size: 12px; color: #adb5bd; margin-bottom: 10px;">Нашёл баг? Напиши Даниилу прямо отсюда!</p>
+        <input type="text" id="bug-name" class="help-input" placeholder="Твоё имя или ник">
+        <input type="text" id="bug-text" class="help-input" placeholder="Что сломалось или какой баг?">
+        <button class="btn-game" style="width: 100%; margin-top: 10px; font-size: 14px; background: linear-gradient(135deg, #ff0055 0%, #9e0059 100%);" onclick="sendBugReport()">✉️ Отправить баг Дане!</button>
+    </div>
+
 </body>
 </html>
