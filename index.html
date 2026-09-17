@@ -2,8 +2,14 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Игровая Империя Дани v7.0</title>
-    <!-- Главный шпионский скрипт Телеграма для передачи баг-репортов в бота -->
+    <title>Игровая Империя Дани v8.0 (БИЗНЕС-ОБНОВЛЕНИЕ)</title>
+    <!-- 
+      📜 ШПИОНСКАЯ ШПАРГАЛКА ДЛЯ ДАНИ (Если забудешь команды):
+      1. Запуск бота в терминале Bash на PythonAnywhere: python3 bot.py
+      2. Быстрое сохранение в Блокноте на Acer: Ctrl + S
+      3. Выделить весь код дочиста: Ctrl + A -> Backspace
+      4. Поиск дедушки всех ботов в Telegram: @BotFather (команда /myapps)
+    -->
     <script src="https://telegram.org"></script>
     <style>
         body {
@@ -90,7 +96,6 @@
         .clicker-circle { width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle, #00b4d8, #5e60ce); box-shadow: 0 0 20px #6fffe9; margin: 20px auto; display: flex; align-items: center; justify-content: center; font-size: 36px; cursor: pointer; transition: transform 0.05s ease; }
         .clicker-circle:active { transform: scale(0.95); }
         
-        /* 🛠️ Стили для текстовых полей формы Помощи ( Bug Report ) */
         .help-input {
             width: 260px; padding: 10px; font-size: 14px; background: #1c2541;
             border: 2px solid #3a506b; border-radius: 10px; color: #ffffff;
@@ -103,13 +108,13 @@
 
     <div class="profile-bar">
         <div>🪙 Золото: <span id="coins-display">0</span></div>
+        <div>📈 Доход: +<span id="income-display">0</span>/с</div>
         <div>🏆 Ранг: <span id="rank-display">🟢 Нубик</span></div>
     </div>
     <div id="main-menu">
-        <h1>🎉 ИГРОВАЯ ИМПЕРИЯ v7.0 🎉</h1>
-        <p>⚔️ Сезон Дуэлей, Сундуков и Новых Скинов открыт! ⚔️</p>
+        <h1>🎉 ИГРОВАЯ ИМПЕРИЯ v8.0 🎉</h1>
+        <p>⚔️ Сезон Пассивного Дохода, Дуэлей и Помощи открыт! ⚔️</p>
 
-        <!-- 🎯 Блок ежедневных квестов -->
         <div class="quest-box">
             <b style="color: #ffea00; font-size: 14px;">🎯 Ежедневные Квесты:</b>
             <div class="quest-item"><span>🎲 Разгадать число (0/1)</span><b id="q-guess-status" style="color:#ff0055;">+20🪙</b></div>
@@ -128,6 +133,9 @@
             
             <button class="btn-game" style="background: linear-gradient(135deg, #2a9d8f 0%, #264653 100%);" onclick="startClickerGame()">🕹️ Игра №1: Хакерский Кликер</button>
             <button class="btn-game" style="background: linear-gradient(135deg, #a8dadc 0%, #457b9d 100%);" onclick="startSniperGame()">🎯 Игра №2: Словесный Снайпер</button>
+            
+            <!-- ⚡ Новая кнопка пассивного бизнеса v8.0! -->
+            <button class="btn-game" style="background: linear-gradient(135deg, #00f5d4 0%, #011627 100%);" onclick="openBusinessScreen()">🏢 Бизнес-Центр (Пассивный доход)</button>
             
             <button class="btn-game" style="background: linear-gradient(135deg, #ffb703 0%, #fb8500 100%);" onclick="openShop()">🏪 Магазин скинов</button>
             <button class="btn-game" style="background: linear-gradient(135deg, #ff70a6 0%, #ff9770 100%);" onclick="openChestScreen()">📦 Тайный Сундук (40🪙)</button>
@@ -156,6 +164,7 @@
         <p id="quiz-feedback" style="font-size: 20px; font-weight: bold; min-height: 30px;"></p>
         <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
     </div>
+
     <div id="cases-game-screen" class="game-screen">
         <h2>📝 Охота за падежами</h2>
         <p style="font-size: 18px;">Определи падеж весёлой фразы:</p>
@@ -171,7 +180,6 @@
         <p id="cases-feedback" style="font-size: 20px; font-weight: bold; min-height: 30px;"></p>
         <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
     </div>
-
     <div id="time-game-screen" class="game-screen">
         <h2>⚡ Математика на время!</h2>
         <p style="font-size: 18px;">Реши 10 примеров подряд, пока тикает таймер!</p>
@@ -183,6 +191,26 @@
         <button class="btn-game" onclick="checkTimeAnswer(event)">🔥 Проверить!</button>
         <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
     </div>
+
+    <!-- 🏢 СОВЕРШЕННО НОВЫЙ ЗАЛ: БИЗНЕС-ЦЕНТР v8.0 (Пассивный доход по чек-листу!) -->
+    <div id="business-screen" class="game-screen">
+        <h2>🏢 Бизнес-Центр Пассивного Дохода</h2>
+        <p>Покупай хакерские предприятия, чтобы золото капало каждую секунду!</p>
+        <div style="margin-top: 20px;">
+            <div style="background: rgba(0, 245, 212, 0.1); padding: 10px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #00f5d4;">
+                <h4 style="margin: 5px 0; color: #00f5d4;">📱 Клик-Ферма (+1🪙/сек)</h4>
+                <p style="margin: 5px 0;" id="biz1-count-text">Куплено: 0</p>
+                <button class="btn-game" style="width: 220px; font-size: 14px; padding: 8px;" id="biz1-btn" onclick="buyBusiness(1, 40, event)">Купить за 40🪙</button>
+            </div>
+            <div style="background: rgba(94, 96, 206, 0.1); padding: 10px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #5e60ce;">
+                <h4 style="margin: 5px 0; color: #5e60ce;">🖥️ Майнинг-Шахта (+5🪙/сек)</h4>
+                <p style="margin: 5px 0;" id="biz2-count-text">Куплено: 0</p>
+                <button class="btn-game" style="width: 220px; font-size: 14px; padding: 8px;" id="biz2-btn" onclick="buyBusiness(2, 150, event)">Купить за 150🪙</button>
+            </div>
+        </div>
+        <p id="business-feedback" style="font-size: 18px; font-weight: bold; color: #ffea00; min-height: 30px;"></p>
+        <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
+    </div>
     <div id="shop-screen" class="game-screen">
         <h2>🏪 Магазин Эффектов Клика</h2>
         <p>Покупай крутые скины за золото!</p>
@@ -190,6 +218,8 @@
             <button class="btn-game" style="background: #3a506b;" onclick="buySkin('⭐', 0, event)">⭐ Обычные Звёзды (Бесплатно)</button>
             <button class="btn-game" style="background: #ffaa00;" onclick="buySkin('🔥', 50, event)">🔥 Огненный Салют (50 монет)</button>
             <button class="btn-game" style="background: #ff0055;" onclick="buySkin('🐈', 100, event)">🐈 Пушистый Кошак (100 монет)</button>
+            <button class="btn-game" style="background: #ffea00; color: #000000;" onclick="buySkin('💎', 150, event)">💎 Бриллиант (150 монет)</button>
+            <button class="btn-game" style="background: #6a4c41;" onclick="buySkin('💩', 30, event)">💩 Какашка (30 монет)</button>
         </div>
         <p id="shop-feedback" style="font-size: 20px; font-weight: bold; color: #ffea00; min-height: 30px;"></p>
         <button class="btn-game" style="background: #ff0055; margin-top: 30px;" onclick="backToMenu()">↩️ Назад в меню</button>
@@ -211,8 +241,6 @@
         <p id="inv-feedback" style="font-size: 20px; font-weight: bold; color: #6fffe9; min-height: 30px;"></p>
         <button class="btn-game" style="background: #ff0055; margin-top: 30px;" onclick="backToMenu()">↩️ Назад в меню</button>
     </div>
-
-    <!-- 🕹️ ТУТ НАЧИНАЕТСЯ КУСОК №8: НОВЫЕ ХАКЕРСКИЕ РЕЖИМЫ И СУНДУКИ -->
     <div id="clicker-game-screen" class="game-screen">
         <h2>🕹️ Хакерский Кликер</h2>
         <p>Тапай по серверу, чтобы получать монеты!</p>
@@ -249,34 +277,46 @@
         <button class="btn-game" style="background: #ff0055; margin-top: 20px;" onclick="backToMenu()">↩️ Назад в меню</button>
     </div>
     <script>
-        // 🔊 БРОНЕБОЙНЫЙ СИНТЕЗАТОР ЗВУКОВ (Работает прямо в процессоре)
+        // 🔊 БРОНЕБОЙНЫЙ СИНТЕЗАТОР ЗВУКОВ БЕЗ ПРЕДУПРЕЖДЕНИЙ
         function playSound(type) {
             try {
                 let ctx = new (window.AudioContext || window.webkitAudioContext)();
-                let osc = ctx.createOscillator(); let gain = ctx.createGain();
-                osc.connect(gain); gain.connect(ctx.destination);
+                let osc = ctx.createOscillator();
+                let gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
                 if (type === 'click') {
-                    osc.type = 'sine'; osc.frequency.setValueAtTime(600, ctx.currentTime);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, ctx.currentTime);
                     gain.gain.setValueAtTime(0.08, ctx.currentTime);
-                    osc.start(); osc.stop(ctx.currentTime + 0.05);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.05);
                 } else if (type === 'win') {
-                    osc.type = 'triangle'; osc.frequency.setValueAtTime(800, ctx.currentTime);
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(800, ctx.currentTime);
                     gain.gain.setValueAtTime(0.15, ctx.currentTime);
-                    osc.start(); osc.stop(ctx.currentTime + 0.1);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.1);
                     setTimeout(() => {
-                        let osc2 = ctx.createOscillator(); let gain2 = ctx.createGain();
-                        osc2.connect(gain2); gain2.connect(ctx.destination);
-                        osc2.type = 'triangle'; osc2.frequency.setValueAtTime(1200, ctx.currentTime);
+                        let osc2 = ctx.createOscillator();
+                        let gain2 = ctx.createGain();
+                        osc2.connect(gain2);
+                        gain2.connect(ctx.destination);
+                        osc2.type = 'triangle';
+                        osc2.frequency.setValueAtTime(1200, ctx.currentTime);
                         gain2.gain.setValueAtTime(0.15, ctx.currentTime);
-                        osc2.start(); osc2.stop(ctx.currentTime + 0.15);
+                        osc2.start();
+                        osc2.stop(ctx.currentTime + 0.15);
                     }, 100);
                 }
-            } catch (e) {}
+            } catch (error) {
+                console.log("Звук спит:", error);
+            }
         }
 
         const QUIZ_DATA = [
             {"q": "Какой язык программирования назван в честь змеи? 🐍", "a": "А) JavaScript", "b": "Б) Python", "c": "В) С++", "d": "Г) Скретч", "ok": "Б"},
-            {"q": "Что программисты называют 'деплоем'? ☁️", "a": "А) Перенос на сервер", "b": "Б) Поход за чипсами", "c": "В) Ошибку в коде", "d": "Г) Сон", "ok": "А"},
+            {"q": "Что программисты называют 'деплоем'? ☁️", "a": "А) Перенос на сервер", "b": "Б) Поход за чипсами", "c": "В) Ошибку в коде", "d": "Г) Скон", "ok": "А"},
             {"q": "Лимит знаков в одном сообщении Telegram? 📜", "a": "А) 100", "b": "Б) 1000", "c": "В) 4096", "d": "Г) Нет лимита", "ok": "В"}
         ];
 
@@ -304,6 +344,11 @@
         let activeSkin = localStorage.getItem('danya_skin') || '⭐';
         let boughtSkins = JSON.parse(localStorage.getItem('danya_bought')) || ['⭐'];
         
+        // 🏢 ПЕРЕМЕННЫЕ ДЛЯ НАШЕГО БИЗНЕСА v8.0
+        let biz1 = parseInt(localStorage.getItem('danya_biz1')) || 0; // Клик-Фермы
+        let biz2 = parseInt(localStorage.getItem('danya_biz2')) || 0; // Майнинг-Шахты
+        let passiveIncome = 0; // Сколько капает в секунду
+
         let qGuessDone = localStorage.getItem('dq_guess') === 'true';
         let qQuizDone = localStorage.getItem('dq_quiz') === 'true';
         let qTimeDone = localStorage.getItem('dq_time') === 'true';
@@ -314,20 +359,21 @@
         let timeScore = 0; let timeCorrectAnswer = 0; let pvpCorrectAnswer = 0;
         let timeLeft = 100; let timeInterval = null; let isTimeGameOver = false;
         let clickerSessionCoins = 0;
-
         updateProfileDisplay();
         renderQuests();
+        startPassiveIncomeLoop(); // ⚡ Запуск вечного начисления золота!
 
         function updateProfileDisplay() {
+            passiveIncome = (biz1 * 1) + (biz2 * 5);
             document.getElementById('coins-display').innerText = coins;
+            document.getElementById('income-display').innerText = passiveIncome;
             
-            // 🏆 КОСМИЧЕСКАЯ СИСТЕМА РАНГОВ v7.0 (По чек-листу!)
             let r = "🟢 Нубик";
-            if(totalWins >= 5) r = "🤖 Ученик Дани";
-            if(totalWins >= 15) r = "🖥️ Хакер Acer";
-            if(totalWins >= 30) r = "👑 Император Даня";
-            if(totalWins >= 50) r = "👑 Бог ДжаваСкрипта";
-            if(totalWins >= 100) r = "🌌 Повелитель Серверов";
+            if (totalWins >= 5) { r = "🤖 Ученик Дани"; }
+            if (totalWins >= 15) { r = "🖥️ Хакер Acer"; }
+            if (totalWins >= 30) { r = "👑 Император Даня"; }
+            if (totalWins >= 50) { r = "👑 Бог ДжаваСкрипта"; }
+            if (totalWins >= 100) { r = "🌌 Повелитель Серверов"; }
             document.getElementById('rank-display').innerText = r;
             
             localStorage.setItem('danya_coins', coins);
@@ -335,6 +381,45 @@
             localStorage.setItem('danya_skin', activeSkin);
             localStorage.setItem('danya_bought', JSON.stringify(boughtSkins));
             localStorage.setItem('danya_last_wheel', lastWheelDate);
+            localStorage.setItem('danya_biz1', biz1);
+            localStorage.setItem('danya_biz2', biz2);
+        }
+
+        // 📈 ФУНКЦИЯ ВЕЧНОГО ТАЙМЕРА (Начисляет золото каждую секунду)
+        function startPassiveIncomeLoop() {
+            setInterval(() => {
+                let income = (biz1 * 1) + (biz2 * 5);
+                if (income > 0) {
+                    coins += income;
+                    updateProfileDisplay();
+                }
+            }, 1000);
+        }
+
+        // 🏪 ФУНКЦИЯ ПОКУПКИ ХАКЕРСКОГО БИЗНЕСА
+        function buyBusiness(id, cost, e) {
+            if (e) { e.stopPropagation(); }
+            const fb = document.getElementById('business-feedback');
+            if (coins >= cost) {
+                coins -= cost;
+                if (id === 1) { biz1++; }
+                else if (id === 2) { biz2++; }
+                fb.style.color = "#00f5d4";
+                fb.innerText = "🎉 Предприятие успешно куплено и запущено!";
+                updateProfileDisplay();
+                openBusinessScreen();
+            } else {
+                fb.style.color = "#ff0055";
+                fb.innerText = "❌ Не хватает золота для инвестиций!";
+            }
+        }
+
+        function openBusinessScreen() {
+            hideAllScreens();
+            document.getElementById('business-screen').style.display = 'block';
+            document.getElementById('business-feedback').innerText = "";
+            document.getElementById('biz1-count-text').innerText = "Куплено: " + biz1 + " (Прибыль: +" + (biz1 * 1) + "🪙/с)";
+            document.getElementById('biz2-count-text').innerText = "Куплено: " + biz2 + " (Прибыль: +" + (biz2 * 5) + "🪙/с)";
         }
 
         function renderQuests() {
@@ -344,202 +429,434 @@
             document.getElementById('q-quiz-status').style.color = qQuizDone ? "#6fffe9" : "#ff0055";
             document.getElementById('q-time-status').innerText = qTimeDone ? "✅ Выполнен" : "+50🪙";
             document.getElementById('q-time-status').style.color = qTimeDone ? "#6fffe9" : "#ff0055";
+            
             localStorage.setItem('dq_guess', qGuessDone);
             localStorage.setItem('dq_quiz', qQuizDone);
             localStorage.setItem('dq_time', qTimeDone);
         }
 
         function spawnStars(e) {
-            try { playSound('click'); } catch(err){}
+            try { playSound('click'); } catch (err) {}
             for (let i = 0; i < 10; i++) {
                 const star = document.createElement('div');
-                star.className = 'star'; star.innerText = activeSkin;
-                star.style.left = (e.clientX - 12) + 'px'; star.style.top = (e.clientY - 12) + 'px';
-                const angle = Math.random() * Math.PI * 2; const dist = 30 + Math.random() * 70;
+                star.className = 'star';
+                star.innerText = activeSkin;
+                star.style.left = (e.clientX - 12) + 'px';
+                star.style.top = (e.clientY - 12) + 'px';
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 30 + Math.random() * 70;
                 star.style.setProperty('--mx', Math.cos(angle) * dist + 'px');
                 star.style.setProperty('--my', Math.sin(angle) * dist + 'px');
                 document.body.appendChild(star);
-                setTimeout(() => star.remove(), 600);
+                setTimeout(() => { star.remove(); }, 600);
             }
         }
 
         function bigCelebration(rewardCoins = 15) {
-            try { playSound('win'); } catch(err){}
-            totalWins++; coins += rewardCoins; updateProfileDisplay();
-            for(let i=0; i<30; i++) { 
+            try { playSound('win'); } catch (err) {}
+            totalWins++;
+            coins += rewardCoins;
+            updateProfileDisplay();
+            for (let i = 0; i < 30; i++) { 
                 setTimeout(() => {
-                    spawnStars({clientX: Math.random() * window.innerWidth, clientY: Math.random() * window.innerHeight});
+                    spawnStars({
+                        clientX: Math.random() * window.innerWidth,
+                        clientY: Math.random() * window.innerHeight
+                    });
                 }, i * 60);
             }
         }
         function startGuessGame() {
-            hideAllScreens(); document.getElementById('guess-game-screen').style.display = 'block';
-            secretNum = Math.floor(Math.random() * 100) + 1; lives = 7; isGameOver = false;
+            hideAllScreens();
+            document.getElementById('guess-game-screen').style.display = 'block';
+            secretNum = Math.floor(Math.random() * 100) + 1;
+            lives = 7;
+            isGameOver = false;
             document.getElementById('attempts-text').innerText = "Осталось попыток: 7/7";
             document.getElementById('guess-feedback').innerText = "";
-            document.getElementById('user-guess-input').value = ""; document.getElementById('user-guess-input').disabled = false;
+            document.getElementById('user-guess-input').value = "";
+            document.getElementById('user-guess-input').disabled = false;
         }
 
         function checkUserGuess(e) {
-            if(e) e.stopPropagation(); if (isGameOver) return;
-            const input = document.getElementById('user-guess-input'); const guess = parseInt(input.value);
+            if (e) { e.stopPropagation(); }
+            if (isGameOver) { return; }
+            const input = document.getElementById('user-guess-input');
+            const guess = parseInt(input.value);
             const fb = document.getElementById('guess-feedback');
-            if (isNaN(guess) || guess < 1 || guess > 100) { fb.innerText = "⚠️ Введи число от 1 до 100!"; return; }
-            lives--; document.getElementById('attempts-text').innerText = "Осталось попыток: " + lives + "/7";
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                fb.innerText = "⚠️ Введи число от 1 до 100!";
+                return;
+            }
+            lives--;
+            document.getElementById('attempts-text').innerText = "Осталось попыток: " + lives + "/7";
             if (guess === secretNum) {
                 fb.innerText = "🎉 УРААА! Число разгадано: " + secretNum;
-                input.disabled = true; isGameOver = true;
-                let reward = 15; if (!qGuessDone) { qGuessDone = true; reward += 20; renderQuests(); }
+                input.disabled = true;
+                isGameOver = true;
+                let reward = 15;
+                if (!qGuessDone) {
+                    qGuessDone = true;
+                    reward += 20;
+                    renderQuests();
+                }
                 bigCelebration(reward);
             } else if (lives <= 0) {
-                fb.innerText = "💥 Конец игры! Было загадано: " + secretNum; input.disabled = true; isGameOver = true;
-            } else { fb.innerText = "❌ Моё число " + (guess < secretNum ? "БОЛЬШЕ ⬆️" : "МЕНЬШЕ ⬇️"); }
+                fb.innerText = "💥 Конец игры! Было загадано: " + secretNum;
+                input.disabled = true;
+                isGameOver = true;
+            } else {
+                fb.innerText = "❌ Моё число " + (guess < secretNum ? "БОЛЬШЕ ⬆️" : "МЕНЬШЕ ⬇️");
+            }
         }
 
-        function startQuizGame() { hideAllScreens(); document.getElementById('quiz-game-screen').style.display = 'block'; currentQuizIndex = 0; showQuizQuestion(); }
+        function startQuizGame() {
+            hideAllScreens();
+            document.getElementById('quiz-game-screen').style.display = 'block';
+            currentQuizIndex = 0;
+            showQuizQuestion();
+        }
+
         function showQuizQuestion() {
-            if(currentQuizIndex >= QUIZ_DATA.length) {
+            if (currentQuizIndex >= QUIZ_DATA.length) {
                 document.getElementById('quiz-question-text').innerText = "🏆 Квиз пройден!";
-                let reward = 15; if (!qQuizDone) { qQuizDone = true; reward += 30; renderQuests(); }
-                bigCelebration(reward); return;
+                let reward = 15;
+                if (!qQuizDone) {
+                    qQuizDone = true;
+                    reward += 30;
+                    renderQuests();
+                }
+                bigCelebration(reward);
+                return;
             }
-            const q = QUIZ_DATA[currentQuizIndex]; document.getElementById('quiz-question-text').innerText = q.q;
-            document.getElementById('quiz-btn-A').innerText = q.a; document.getElementById('quiz-btn-Б').innerText = q.b;
-            document.getElementById('quiz-btn-В').innerText = q.c; document.getElementById('quiz-btn-Г').innerText = q.d;
+            const q = QUIZ_DATA[currentQuizIndex];
+            document.getElementById('quiz-question-text').innerText = q.q;
+            document.getElementById('quiz-btn-A').innerText = q.a;
+            document.getElementById('quiz-btn-Б').innerText = q.b;
+            document.getElementById('quiz-btn-В').innerText = q.c;
+            document.getElementById('quiz-btn-Г').innerText = q.d;
             document.getElementById('quiz-feedback').innerText = "";
         }
+
         function checkQuizAnswer(letter, e) {
-            if(e) e.stopPropagation(); if(currentQuizIndex >= QUIZ_DATA.length) return;
-            if (letter === QUIZ_DATA[currentQuizIndex].ok) { currentQuizIndex++; showQuizQuestion(); }
-            else { document.getElementById('quiz-feedback').innerText = "❌ Неверно!"; }
+            if (e) { e.stopPropagation(); }
+            if (currentQuizIndex >= QUIZ_DATA.length) { return; }
+            if (letter === QUIZ_DATA[currentQuizIndex].ok) {
+                currentQuizIndex++;
+                showQuizQuestion();
+            } else {
+                document.getElementById('quiz-feedback').innerText = "❌ Неверно!";
+            }
         }
 
-        function startCasesGame() { hideAllScreens(); document.getElementById('cases-game-screen').style.display = 'block'; currentCaseIndex = 0; showCaseQuestion(); }
+        function startCasesGame() {
+            hideAllScreens();
+            document.getElementById('cases-game-screen').style.display = 'block';
+            currentCaseIndex = 0;
+            showCaseQuestion();
+        }
+
         function showCaseQuestion() {
-            if(currentCaseIndex >= CASE_DATA.length) {
+            if (currentCaseIndex >= CASE_DATA.length) {
                 document.getElementById('case-phrase-text').innerText = "🏆 ПЯТЁРКА ОТ УЧИТЕЛЬНИЦЫ!";
-                bigCelebration(15); return;
+                bigCelebration(15);
+                return;
             }
-            document.getElementById('case-phrase-text').innerText = CASE_DATA[currentCaseIndex].p; document.getElementById('cases-feedback').innerText = "";
+            document.getElementById('case-phrase-text').innerText = CASE_DATA[currentCaseIndex].p;
+            document.getElementById('cases-feedback').innerText = "";
         }
+
         function checkCaseAnswer(choice, e) {
-            if(e) e.stopPropagation(); if(currentCaseIndex >= CASE_DATA.length) return;
-            if (choice === CASE_DATA[currentCaseIndex].ok) { currentCaseIndex++; showCaseQuestion(); }
-            else { document.getElementById('cases-feedback').innerText = "❌ Мимо!"; }
-        }
-
-        function startTimeGame() {
-            hideAllScreens(); document.getElementById('time-game-screen').style.display = 'block';
-            timeScore = 0; isTimeGameOver = false; timeLeft = 100;
-            document.getElementById('time-score-text').innerText = "Решено примеров: 0/10"; document.getElementById('time-feedback').innerText = "";
-            document.getElementById('user-time-input').value = ""; document.getElementById('user-time-input').disabled = false;
-            generateTimeExample();
-            if(timeInterval) clearInterval(timeInterval);
-            timeInterval = setInterval(() => {
-                if(isTimeGameOver) return; timeLeft -= 0.6;
-                document.getElementById('time-bar-element').style.width = timeLeft + "%";
-                if(timeLeft <= 0) { clearInterval(timeInterval); isTimeGameOver = true; document.getElementById('time-feedback').innerText = "💥 Время вышло!"; document.getElementById('user-time-input').disabled = true; }
-            }, 100);
-        }
-        function generateTimeExample() {
-            if(timeScore >= 10) { 
-                clearInterval(timeInterval); isTimeGameOver = true; document.getElementById('time-example-text').innerText = "🏆 СЕКРЕТНЫЙ КОД: [MAX-PRO-2026]";
-                let reward = 15; if (!qTimeDone) { qTimeDone = true; reward += 50; renderQuests(); }
-                bigCelebration(reward); return; 
+            if (e) { e.stopPropagation(); }
+            if (currentCaseIndex >= CASE_DATA.length) { return; }
+            if (choice === CASE_DATA[currentCaseIndex].ok) {
+                currentCaseIndex++;
+                showCaseQuestion();
+            } else {
+                document.getElementById('cases-feedback').innerText = "❌ Мимо!";
             }
-            let n1 = Math.floor(Math.random() * 40) + 10; let n2 = Math.floor(Math.random() * 30) + 1;
-            timeCorrectAnswer = n1 + n2; document.getElementById('time-example-text').innerText = n1 + " + " + n2 + " = ?";
-            document.getElementById('user-time-input').value = "";
         }
+
         function checkTimeAnswer(e) {
-            if(e) e.stopPropagation(); if(isTimeGameOver) return;
-            if(parseInt(document.getElementById('user-time-input').value) === timeCorrectAnswer) { timeScore++; document.getElementById('time-score-text').innerText = "Решено: " + timeScore + "/10"; timeLeft = Math.min(100, timeLeft + 15); generateTimeExample(); }
-            else { document.getElementById('time-feedback').innerText = "❌ Ошибка!"; }
+            if (e) { e.stopPropagation(); }
+            if (isTimeGameOver) { return; }
+            if (parseInt(document.getElementById('user-time-input').value) === timeCorrectAnswer) {
+                timeScore++;
+                document.getElementById('time-score-text').innerText = "Решено: " + timeScore + "/10";
+                timeLeft = Math.min(100, timeLeft + 15);
+                generateTimeExample();
+            } else {
+                document.getElementById('time-feedback').innerText = "❌ Ошибка!";
+            }
         }
 
-        function openShop() { hideAllScreens(); document.getElementById('shop-screen').style.display = 'block'; document.getElementById('shop-feedback').innerText = ""; }
+        function openShop() {
+            hideAllScreens();
+            document.getElementById('shop-screen').style.display = 'block';
+            document.getElementById('shop-feedback').innerText = "";
+        }
+
         function buySkin(skinSymbol, cost, e) {
-            if(e) e.stopPropagation();
-            if (boughtSkins.includes(skinSymbol)) { document.getElementById('shop-feedback').innerText = "🎒 Этот скин уже у тебя в Рюкзаке!"; return; }
-            if (coins >= cost) { coins -= cost; boughtSkins.push(skinSymbol); document.getElementById('shop-feedback').innerText = "🎉 Куплено! Вещь добавлена в Рюкзак!"; updateProfileDisplay(); }
-            else { document.getElementById('shop-feedback').innerText = "❌ Не хватает золота!"; }
+            if (e) { e.stopPropagation(); }
+            if (boughtSkins.includes(skinSymbol)) {
+                document.getElementById('shop-feedback').innerText = "🎒 Этот скин уже у тебя в Рюкзаке!";
+                return;
+            }
+            if (coins >= cost) {
+                coins -= cost;
+                boughtSkins.push(skinSymbol);
+                document.getElementById('shop-feedback').innerText = "🎉 Куплено! Вещь добавлена в Рюкзак!";
+                updateProfileDisplay();
+            } else {
+                document.getElementById('shop-feedback').innerText = "❌ Не хватает золота!";
+            }
+        }
+        function openWheel() {
+            hideAllScreens();
+            document.getElementById('wheel-screen').style.display = 'block';
+            document.getElementById('wheel-feedback').innerText = "";
+            let today = new Date().toDateString();
+            if (lastWheelDate === today) {
+                document.getElementById('wheel-feedback').innerText = "⚠️ Упс! Лимит исчерпан. Возвращайся завтра!";
+                document.getElementById('spin-action-btn').disabled = true;
+            } else {
+                document.getElementById('spin-action-btn').disabled = false;
+            }
         }
 
-        function openWheel() {
-            hideAllScreens(); document.getElementById('wheel-screen').style.display = 'block'; document.getElementById('wheel-feedback').innerText = "";
-            let today = new Date().toDateString();
-            if (lastWheelDate === today) { document.getElementById('wheel-feedback').innerText = "⚠️ Упс! Лимит исчерпан. Возвращайся завтра!"; document.getElementById('spin-action-btn').disabled = true; }
-            else { document.getElementById('spin-action-btn').disabled = false; }
-        }
         function spinTheWheel(e) {
-            if(e) e.stopPropagation(); document.getElementById('spin-action-btn').disabled = true;
+            if (e) { e.stopPropagation(); }
+            document.getElementById('spin-action-btn').disabled = true;
             lastWheelDate = new Date().toDateString();
             let items = ['🪙10', '🪙30', '🪙100', '🔥', '🐈', '💩', '💎'];
-            let box = document.getElementById('wheel-anim-box'); let idx = 0;
-            let intr = setInterval(() => { box.innerText = items[idx]; idx = (idx + 1) % items.length; }, 100);
+            let box = document.getElementById('wheel-anim-box');
+            let idx = 0;
+            let intr = setInterval(() => {
+                box.innerText = items[idx];
+                idx = (idx + 1) % items.length;
+            }, 100);
             setTimeout(() => {
-                clearInterval(intr); let finalPrize = items[Math.floor(Math.random() * items.length)]; box.innerText = finalPrize;
-                if (finalPrize === '🪙10') { coins += 10; document.getElementById('wheel-feedback').innerText = "🎉 +10 монет!"; }
-                else if (finalPrize === '🪙30') { coins += 30; document.getElementById('wheel-feedback').innerText = "🎉 +30 монет!"; }
-                else if (finalPrize === '🪙100') { coins += 100; document.getElementById('wheel-feedback').innerText = "🔥 МЕГА-ДЖЕКПОТ! +100 МОНЕТ!"; }
-                else if (finalPrize === '💩') { document.getElementById('wheel-feedback').innerText = "💩 Скин Какашка добавлен в рюкзак!"; if(!boughtSkins.includes('💩')) boughtSkins.push('💩'); }
-                else if (finalPrize === '💎') { document.getElementById('wheel-feedback').innerText = "💎 УЛЬТРА-РЕДКИЙ БРИЛЛИАНТ! В рюкзаке!"; if(!boughtSkins.includes('💎')) boughtSkins.push('💎'); }
-                else { document.getElementById('wheel-feedback').innerText = "✨ Выпал редкий скин: " + finalPrize; if(!boughtSkins.includes(finalPrize)) boughtSkins.push(finalPrize); }
+                clearInterval(intr);
+                let finalPrize = items[Math.floor(Math.random() * items.length)];
+                box.innerText = finalPrize;
+                if (finalPrize === '🪙10') {
+                    coins += 10;
+                    document.getElementById('wheel-feedback').innerText = "🎉 +10 монет!";
+                } else if (finalPrize === '🪙30') {
+                    coins += 30;
+                    document.getElementById('wheel-feedback').innerText = "🎉 +30 монет!";
+                } else if (finalPrize === '🪙100') {
+                    coins += 100;
+                    document.getElementById('wheel-feedback').innerText = "🔥 МЕГА-ДЖЕКПОТ! +100 МОНЕТ!";
+                } else if (finalPrize === '💩') {
+                    document.getElementById('wheel-feedback').innerText = "💩 Скин Какашка добавлен в рюкзак!";
+                    if (!boughtSkins.includes('💩')) { boughtSkins.push('💩'); }
+                } else if (finalPrize === '💎') {
+                    document.getElementById('wheel-feedback').innerText = "💎 УЛЬТРА-РЕДКИЙ БРИЛЛИАНТ! В рюкзаке!";
+                    if (!boughtSkins.includes('💎')) { boughtSkins.push('💎'); }
+                } else {
+                    document.getElementById('wheel-feedback').innerText = "✨ Выпал редкий скин: " + finalPrize;
+                    if (!boughtSkins.includes(finalPrize)) { boughtSkins.push(finalPrize); }
+                }
                 bigCelebration(0);
             }, 2000);
         }
 
         function openInventory() {
-            hideAllScreens(); document.getElementById('inventory-screen').style.display = 'block';
-            let box = document.getElementById('inventory-cells-box'); box.innerHTML = "";
+            hideAllScreens();
+            document.getElementById('inventory-screen').style.display = 'block';
+            let box = document.getElementById('inventory-cells-box');
+            box.innerHTML = "";
             boughtSkins.forEach(skin => {
-                let cell = document.createElement('div'); cell.className = 'inv-cell' + (activeSkin === skin ? ' inv-active' : ''); cell.innerText = skin;
-                cell.onclick = (e) => { if(e) e.stopPropagation(); activeSkin = skin; document.getElementById('inv-feedback').innerText = "🎯 Экипирован эффект: " + skin; updateProfileDisplay(); openInventory(); };
+                let cell = document.createElement('div');
+                cell.className = 'inv-cell' + (activeSkin === skin ? ' inv-active' : '');
+                cell.innerText = skin;
+                cell.onclick = (e) => {
+                    if (e) { e.stopPropagation(); }
+                    activeSkin = skin;
+                    document.getElementById('inv-feedback').innerText = "🎯 Экипирован эффект: " + skin;
+                    updateProfileDisplay();
+                    openInventory();
+                };
                 box.appendChild(cell);
             });
         }
 
-        function startClickerGame() { hideAllScreens(); document.getElementById('clicker-game-screen').style.display = 'block'; clickerSessionCoins = 0; document.getElementById('clicker-score-text').innerText = "Добыто за сессию: 0🪙"; }
-        function tapServer(e) { if(e) e.stopPropagation(); clickerSessionCoins++; coins++; document.getElementById('clicker-score-text').innerText = "Добыто за сессию: " + clickerSessionCoins + "🪙"; updateProfileDisplay(); }
-
-        function startSniperGame() { hideAllScreens(); document.getElementById('sniper-game-screen').style.display = 'block'; currentSniperIndex = 0; showSniperQuestion(); }
-
-        function showSniperQuestion() {
-            if(currentSniperIndex >= SNIPER_DATA.length) { document.getElementById('sniper-desc-text').innerText = "🏆 ТЫ ИСТИННЫЙ СНАЙПЕР! +15 МОНЕТ!"; document.getElementById('sniper-buttons-box').innerHTML = ""; bigCelebration(15); return; }
-            let s = SNIPER_DATA[currentSniperIndex]; document.getElementById('sniper-desc-text').innerText = s.d; document.getElementById('sniper-feedback').innerText = "";
-            let box = document.getElementById('sniper-buttons-box'); box.innerHTML = "";
-            s.variants.forEach(v => { let b = document.createElement('button'); b.className = 'btn-variant'; b.innerText = v; b.onclick = (e) => { if(e) e.stopPropagation(); if(v === s.ok) { currentSniperIndex++; showSniperQuestion(); } else { document.getElementById('sniper-feedback').innerText = "❌ Ошибка, цель мимо!"; } }; box.appendChild(b); });
+        function startClickerGame() {
+            hideAllScreens();
+            document.getElementById('clicker-game-screen').style.display = 'block';
+            clickerSessionCoins = 0;
+            document.getElementById('clicker-score-text').innerText = "Добыто за сессию: 0🪙";
         }
 
-        function startPvPGame() { hideAllScreens(); document.getElementById('pvp-game-screen').style.display = 'block'; document.getElementById('pvp-feedback').innerText = ""; document.getElementById('user-pvp-input').value = ""; document.getElementById('user-pvp-input').disabled = false; let n1 = Math.floor(Math.random() * 50) + 10; let n2 = Math.floor(Math.random() * 40) + 10; pvpCorrectAnswer = n1 + n2; document.getElementById('pvp-example-text').innerText = n1 + " + " + n2 + " = ?"; setTimeout(() => { if(document.getElementById('pvp-game-screen').style.display === 'block' && !document.getElementById('user-pvp-input').disabled) { document.getElementById('user-pvp-input').disabled = true; document.getElementById('pvp-feedback').innerText = "💥 Бот-хакер нанёс удар быстрее! Ты потерял 50🪙"; coins = Math.max(0, coins - 50); updateProfileDisplay(); } }, 6000); }
-        function checkPvPAnswer(e) { if(e) e.stopPropagation(); const input = document.getElementById('user-pvp-input'); if(input.disabled) return; if(parseInt(input.value) === pvpCorrectAnswer) { input.disabled = true; document.getElementById('pvp-feedback').innerText = "⚔️ ПОБЕДА! Ты сокрушил бота и забрал банк +50🪙!"; bigCelebration(50); } else { document.getElementById('pvp-feedback').innerText = "❌ Ошибка! Удар заблокирован ботом!"; } }
+        function tapServer(e) {
+            if (e) { e.stopPropagation(); }
+            clickerSessionCoins++;
+            coins++;
+            document.getElementById('clicker-score-text').innerText = "Добыто за сессию: " + clickerSessionCoins + "🪙";
+            updateProfileDisplay();
+        }
 
-        function openChestScreen() { hideAllScreens(); document.getElementById('chest-game-screen').style.display = 'block'; document.getElementById('chest-feedback').innerText = ""; document.getElementById('chest-anim-box').innerText = "📦"; document.getElementById('chest-open-btn').disabled = false; }
-        function openSecretChest(e) { if(e) e.stopPropagation(); if (coins < 40) { document.getElementById('chest-feedback').innerText = "❌ Не хватает 40 монет!"; return; } coins -= 40; document.getElementById('chest-open-btn').disabled = true; updateProfileDisplay(); let loot = ['💎', '🪙20', '🪙60', '💩', '⭐']; let box = document.getElementById('chest-anim-box'); let idx = 0; let intr = setInterval(() => { box.innerText = loot[idx]; idx = (idx + 1) % loot.length; }, 100); setTimeout(() => { clearInterval(intr); let prize = loot[Math.floor(Math.random() * loot.length)]; box.innerText = prize; if(prize === '💎') { document.getElementById('chest-feedback').innerText = "💎 УЛЬТРА-РЕДКИЙ БРИЛЛИАНТ! Добавлен в рюкзак!"; if(!boughtSkins.includes('💎')) boughtSkins.push('💎'); } else if(prize === '🪙20') { coins += 20; document.getElementById('chest-feedback').innerText = "🎉 Найдено +20 монет!"; } else if(prize === '🪙60') { coins += 60; document.getElementById('chest-feedback').innerText = "🎉 Найдено +60 монет!"; } else if(prize === '💩') { document.getElementById('chest-feedback').innerText = "💩 Какашка... Ну, зато эксклюзив! В рюкзаке!"; if(!boughtSkins.includes('💩')) boughtSkins.push('💩'); } else { document.getElementById('chest-feedback').innerText = "✨ Обычная звезда добавлена!"; } updateProfileDisplay(); }, 1500); }
+        function startSniperGame() {
+            hideAllScreens();
+            document.getElementById('sniper-game-screen').style.display = 'block';
+            currentSniperIndex = 0;
+            showSniperQuestion();
+        }
+        function showSniperQuestion() {
+            if (currentSniperIndex >= SNIPER_DATA.length) {
+                document.getElementById('sniper-desc-text').innerText = "🏆 ТЫ ИСТИННЫЙ СНАЙПЕР! +15 МОНЕТ!";
+                document.getElementById('sniper-buttons-box').innerHTML = "";
+                bigCelebration(15);
+                return;
+            }
+            let s = SNIPER_DATA[currentSniperIndex];
+            document.getElementById('sniper-desc-text').innerText = s.d;
+            document.getElementById('sniper-feedback').innerText = "";
+            let box = document.getElementById('sniper-buttons-box');
+            box.innerHTML = "";
+            s.variants.forEach(v => {
+                let b = document.createElement('button');
+                b.className = 'btn-variant';
+                b.innerText = v;
+                b.onclick = (e) => {
+                    if (e) { e.stopPropagation(); }
+                    if (v === s.ok) {
+                        currentSniperIndex++;
+                        showSniperQuestion();
+                    } else {
+                        document.getElementById('sniper-feedback').innerText = "❌ Ошибка, цель мимо!";
+                    }
+                };
+                box.appendChild(b);
+            });
+        }
+
+        function startPvPGame() {
+            hideAllScreens();
+            document.getElementById('pvp-game-screen').style.display = 'block';
+            document.getElementById('pvp-feedback').innerText = "";
+            document.getElementById('user-pvp-input').value = "";
+            document.getElementById('user-pvp-input').disabled = false;
+            let n1 = Math.floor(Math.random() * 50) + 10;
+            let n2 = Math.floor(Math.random() * 40) + 10;
+            pvpCorrectAnswer = n1 + n2;
+            document.getElementById('pvp-example-text').innerText = n1 + " + " + n2 + " = ?";
+            setTimeout(() => {
+                if (document.getElementById('pvp-game-screen').style.display === 'block' && !document.getElementById('user-pvp-input').disabled) {
+                    document.getElementById('user-pvp-input').disabled = true;
+                    document.getElementById('pvp-feedback').innerText = "💥 Бот-хакер нанёс удар быстрее! Ты потерял 50🪙";
+                    coins = Math.max(0, coins - 50);
+                    updateProfileDisplay();
+                }
+            }, 6000);
+        }
+
+        function checkPvPAnswer(e) {
+            if (e) { e.stopPropagation(); }
+            const input = document.getElementById('user-pvp-input');
+            if (input.disabled) { return; }
+            if (parseInt(input.value) === pvpCorrectAnswer) {
+                input.disabled = true;
+                document.getElementById('pvp-feedback').innerText = "⚔️ ПОБЕДА! Ты сокрушил бота и забрал банк +50🪙!";
+                bigCelebration(50);
+            } else {
+                document.getElementById('pvp-feedback').innerText = "❌ Ошибка! Удар заблокирован ботом!";
+            }
+        }
+
+        function openChestScreen() {
+            hideAllScreens();
+            document.getElementById('chest-game-screen').style.display = 'block';
+            document.getElementById('chest-feedback').innerText = "";
+            document.getElementById('chest-anim-box').innerText = "📦";
+            document.getElementById('chest-open-btn').disabled = false;
+        }
+
+        function openSecretChest(e) {
+            if (e) { e.stopPropagation(); }
+            if (coins < 40) {
+                document.getElementById('chest-feedback').innerText = "❌ Не хватает 40 монет!";
+                return;
+            }
+            coins -= 40;
+            document.getElementById('chest-open-btn').disabled = true;
+            updateProfileDisplay();
+            let loot = ['💎', '🪙20', '🪙60', '💩', '⭐'];
+            let box = document.getElementById('chest-anim-box');
+            let idx = 0;
+            let intr = setInterval(() => {
+                box.innerText = loot[idx];
+                idx = (idx + 1) % loot.length;
+            }, 100);
+            setTimeout(() => {
+                clearInterval(intr);
+                let prize = loot[Math.floor(Math.random() * loot.length)];
+                box.innerText = prize;
+                if (prize === '💎') {
+                    document.getElementById('chest-feedback').innerText = "💎 УЛЬТРА-РЕДКИЙ БРИЛЛИАНТ! Добавлен в рюкзак!";
+                    if (!boughtSkins.includes('💎')) { boughtSkins.push('💎'); }
+                } else if (prize === '🪙20') {
+                    coins += 20;
+                    document.getElementById('chest-feedback').innerText = "🎉 Найдено +20 монет!";
+                } else if (prize === '🪙60') {
+                    coins += 60;
+                    document.getElementById('chest-feedback').innerText = "🎉 Найдено +60 монет!";
+                } else if (prize === '💩') {
+                    document.getElementById('chest-feedback').innerText = "💩 Какашка... Ну, зато эксклюзив! В рюкзаке!";
+                    if (!boughtSkins.includes('💩')) { boughtSkins.push('💩'); }
+                } else {
+                    document.getElementById('chest-feedback').innerText = "✨ Обычная звезда добавлена!";
+                }
+                updateProfileDisplay();
+            }, 1500);
+        }
 
         function hideAllScreens() {
-            document.getElementById('main-menu').style.display = 'none'; document.getElementById('guess-game-screen').style.display = 'none';
-            document.getElementById('quiz-game-screen').style.display = 'none'; document.getElementById('cases-game-screen').style.display = 'none';
-            document.getElementById('time-game-screen').style.display = 'none'; document.getElementById('shop-screen').style.display = 'none';
-            document.getElementById('wheel-screen').style.display = 'none'; document.getElementById('inventory-screen').style.display = 'none';
-            document.getElementById('clicker-game-screen').style.display = 'none'; document.getElementById('sniper-game-screen').style.display = 'none';
-            document.getElementById('pvp-game-screen').style.display = 'none'; document.getElementById('chest-game-screen').style.display = 'none';
-            if(timeInterval) clearInterval(timeInterval);
+            document.getElementById('main-menu').style.display = 'none';
+            document.getElementById('guess-game-screen').style.display = 'none';
+            document.getElementById('quiz-game-screen').style.display = 'none';
+            document.getElementById('cases-game-screen').style.display = 'none';
+            document.getElementById('time-game-screen').style.display = 'none';
+            document.getElementById('shop-screen').style.display = 'none';
+            document.getElementById('wheel-screen').style.display = 'none';
+            document.getElementById('inventory-screen').style.display = 'none';
+            document.getElementById('clicker-game-screen').style.display = 'none';
+            document.getElementById('sniper-game-screen').style.display = 'none';
+            document.getElementById('pvp-game-screen').style.display = 'none';
+            document.getElementById('chest-game-screen').style.display = 'none';
+            document.getElementById('business-screen').style.display = 'none';
+            if (timeInterval) { clearInterval(timeInterval); }
         }
-        function backToMenu() { hideAllScreens(); document.getElementById('main-menu').style.display = 'block'; }
-        document.addEventListener('keydown', function(event) { if (event.key === 'Enter') { if (document.getElementById('guess-game-screen').style.display === 'block') checkUserGuess(event); else if (document.getElementById('time-game-screen').style.display === 'block') checkTimeAnswer(event); else if (document.getElementById('pvp-game-screen').style.display === 'block') checkPvPAnswer(event); } });
-        
-        // 🆘 ШПИОНСКАЯ СЛУЖБА ПОМОЩИ (Баг-Репорт)
-        const tg = window.Telegram ? window.Telegram.WebApp : null;
-        if (tg) { tg.ready(); tg.expand(); }
+
+        function backToMenu() {
+            hideAllScreens();
+            document.getElementById('main-menu').style.display = 'block';
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                if (document.getElementById('guess-game-screen').style.display === 'block') {
+                    checkUserGuess(event);
+                } else if (document.getElementById('time-game-screen').style.display === 'block') {
+                    checkTimeAnswer(event);
+                } else if (document.getElementById('pvp-game-screen').style.display === 'block') {
+                    checkPvPAnswer(event);
+                }
+            }
+        });
 
         function sendBugReport() {
             const name = document.getElementById('bug-name').value.trim();
             const text = document.getElementById('bug-text').value.trim();
-            if (!name || !text) { alert('⚠️ Заполни оба поля формы Помощи!'); return; }
+            if (!name || !text) {
+                alert('⚠️ Заполни оба поля формы Помощи!');
+                return;
+            }
             if (tg) {
-                const report = `🚨 БАГ-РЕПОРТ v7.0 🚨\n👤 От: ${name}\n📝 Проблема: ${text}`;
-                tg.sendData(report); tg.close();
+                const report = `🚨 БАГ-РЕПОРТ v8.0 🚨\n👤 От: ${name}\n📝 Проблема: ${text}`;
+                tg.sendData(report);
+                tg.close();
             } else {
                 alert('🚀 [Режим ПК] Сообщение отправлено бы Дане в бота!');
                 backToMenu();
